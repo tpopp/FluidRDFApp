@@ -12,14 +12,13 @@ public class SmoothGofr {
 	 * @throws IOException
 	 */
 	public void smoothGofr(double[] lambda, Data dat) throws IOException {
-		// TODO USER INPUT
 		int maxsteps = 1000; // upper limit for declaring arrays.
 		int nsteps = lambda.length;
 
 		int maxnr = 100000;
 		double[] r = dat.r;
 		double[] g_corr = new double[maxnr];
-		double[] deltag = new double[maxnr];
+		double[] deltag = new double[dat.gofr.length];
 		double[] g_smooth = new double[maxnr];
 
 		// step boundaries.

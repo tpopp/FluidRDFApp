@@ -272,16 +272,17 @@ public class ExportTable extends JPanel implements Serializable {
 						int i = table.getColumnCount();
 						int j = table.getRowCount();
 						for (int ii = 0; ii < i; ii++) {
-							sb.append(table.getColumnName(ii) + "\t\t");
+							sb.append(table.getColumnName(ii) + "\t");
 						}
 						sb.append('\n');
 						for (int jj = 0; jj < j; jj++) {
 							for (int ii = 0; ii < i; ii++) {
-								if (table.getValueAt(jj, ii).toString()
-										.equals("Infinity"))
-									sb.append(table.getValueAt(jj, ii)
-											.toString() + '\t');
-								sb.append(String.format("%6e\t",
+//								if (table.getValueAt(jj, ii).toString()
+//										.equals("Infinity"))
+//									sb.append(table.getValueAt(jj, ii)
+//											.toString() + '\t');
+//								else
+									sb.append(String.format("%6e\t",
 										table.getValueAt(jj, ii)));
 							}
 							sb.append('\n');
@@ -327,8 +328,9 @@ public class ExportTable extends JPanel implements Serializable {
 
 		@Override
 		public void setValue(Object value) {
-			nf.setMaximumFractionDigits(4);
+			nf.setMaximumFractionDigits(6);
 			setText((value == null) ? "" : nf.format(value));
 		}
 	}
+	
 }

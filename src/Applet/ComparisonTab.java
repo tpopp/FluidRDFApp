@@ -237,7 +237,7 @@ public class ComparisonTab extends JPanel implements Serializable {
 			}
 		});
 
-		mod.addTableModelListener(new TableModelListener() {
+		TableModelListener tml = new TableModelListener() {
 
 			@Override
 			public void tableChanged(TableModelEvent event) {
@@ -248,10 +248,23 @@ public class ComparisonTab extends JPanel implements Serializable {
 				if (row == -1 || col == -1)
 					return;
 				Boolean value = (Boolean) mod.getValueAt(row, col);
-				systems.systems.get(col - 1).show[row] = value;
+				Data temp = systems.systems.get(col-1);
+				if(temp.gofr.length <  temp.r.length){
+					System.out.println(temp.r.length);
+					System.out.println(temp.gofr.length);
+					mod.removeTableModelListener(this);
+					mod.setValueAt(new Boolean(false), row, col);
+					mod.addTableModelListener(this);
+				}
+				else
+					temp.show[row] = value;
 				refreshChart();
 				parent.updateSystems();
 			}
-		});
+		};
+
+		
+		mod.addTableModelListener(tml);
 	}
+	
 }

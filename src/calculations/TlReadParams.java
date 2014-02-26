@@ -5,7 +5,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class TlReadParams {
+import javax.swing.SwingWorker;
+
+public class TlReadParams extends SwingWorker<Void, Void> {
+	private Integer progress = 0;
+	private double phi;
+	private double[] epsilon, lambda, r_dmd;
+	Data dat;
+
+	public TlReadParams(double phi, double[] epsilon, double[] lambda,
+			double[] r_dmd, Data dat) {
+		
+		this.phi = phi;
+		this.epsilon = epsilon;
+		this.lambda = lambda;
+		this.r_dmd = r_dmd;
+		this.dat = dat;
+	}
 
 	/**
 	 * Set-up then calls tanglu-struct to do calculations
@@ -67,6 +83,9 @@ public class TlReadParams {
 	private void tanglu_struct(double rho, final double r[],
 			final double gofr[], final double[] lambda, double[] epsilon,
 			Data dat) {
+		progress = 0;
+		setProgress(0);
+
 		final tanglu_constants tlc = new tanglu_constants();
 
 		final double[] depsilon = new double[epsilon.length];
@@ -153,7 +172,10 @@ public class TlReadParams {
 						if (r[i] > 8.0)
 							break;
 					}
-
+					synchronized (progress) {
+						progress++;
+						setProgress(progress);
+					}
 				}
 
 			});
@@ -585,4 +607,9 @@ public class TlReadParams {
 		return res;
 	}
 
+	@Override
+	protected Void doInBackground() throws Exception {
+		tlReadParams(phi, epsilon, lambda, r_dmd, dat);
+		return null;
+	}
 }

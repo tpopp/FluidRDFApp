@@ -53,6 +53,7 @@ public class FluidApp extends JApplet implements Serializable {
 	private JMenuItem removeSys;
 	private JMenuItem loadSys;
 	private JMenuItem storeSys;
+	private boolean notFirst = false;
 
 	/** 
 	 * 
@@ -62,21 +63,23 @@ public class FluidApp extends JApplet implements Serializable {
 		final JFileChooser jf = new JFileChooser();
 		// menubar
 		JMenuBar menu = new JMenuBar();
-		JMenu options = new JMenu(Messages.getString("FluidApp.menuTitle")); //$NON-NLS-1$
-		newSystem = new JMenuItem(Messages.getString("FluidApp.newSystem")); //$NON-NLS-1$
-		removeSys = new JMenuItem(Messages.getString("FluidApp.removeSystem")); //$NON-NLS-1$
-		store = new JMenuItem(Messages.getString("FluidApp.storeState")); //$NON-NLS-1$
-		load = new JMenuItem(Messages.getString("FluidApp.loadState")); //$NON-NLS-1$
+		JMenu options = new JMenu("Systems"); 
+		newSystem = new JMenuItem(Messages.getString("FluidApp.newSystem")); 
+		removeSys = new JMenuItem(Messages.getString("FluidApp.removeSystem")); 
+		store = new JMenuItem(Messages.getString("FluidApp.storeState"));
+		load = new JMenuItem(Messages.getString("FluidApp.loadState")); 
 		storeSys = new JMenuItem("Store System");
 		loadSys = new JMenuItem("Load System");
+		JMenu saveLoad = new JMenu("Store/Load");
 
 		options.add(newSystem);
 		options.add(removeSys);
-		options.add(store);
-		options.add(load);
-		options.add(storeSys);
-		options.add(loadSys);
+		saveLoad.add(store);
+		saveLoad.add(load);
+		saveLoad.add(storeSys);
+		saveLoad.add(loadSys);
 		menu.add(options);
+		menu.add(saveLoad);
 		setJMenuBar(menu);
 
 		// Initial Layout
@@ -143,12 +146,14 @@ public class FluidApp extends JApplet implements Serializable {
 	}
 
 	public void newStuff() {
-		revalidate();
-		repaint();
-		compare.revalidate();
-		compare.repaint();
-		table.revalidate();
-		table.repaint();
+			compare.revalidate();
+			compare.repaint();
+			systems.getSelectedComponent().revalidate();
+			systems.getSelectedComponent().repaint();
+			table.revalidate();
+			table.repaint();
+			revalidate();
+			repaint();
 	}
 
 	/**

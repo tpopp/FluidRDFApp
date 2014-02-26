@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,6 +20,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -25,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -42,7 +48,7 @@ import calculations.TlReadParams;
  * @author Tres
  * 
  */
-public class SystemTab extends JPanel implements Serializable {
+public class SystemTab extends JPanel implements Serializable, PropertyChangeListener {
 
 	/**
 	 * 
@@ -85,6 +91,7 @@ public class SystemTab extends JPanel implements Serializable {
 	private SerialListener tableListener;
 	private String positiveWarning = Messages
 			.getString("SystemTab.positiveParameters");
+	private JProgressBar progressBar;
 
 	/**
 	 * 
@@ -365,6 +372,25 @@ public class SystemTab extends JPanel implements Serializable {
 		 * End r max
 		 */
 
+		
+		/*
+		 * progress bar
+		 */
+		progressBar = new JProgressBar(0, 10);
+		progressBar.setMinimumSize(new Dimension(90, 20));
+		progressBar.setStringPainted(true);
+		GridBagConstraints gbc_btnProg = new GridBagConstraints();
+		gbc_btnProg.insets = new Insets(0, 0, 5, 5);
+		gbc_btnProg.gridx = 1;
+		gbc_btnProg.gridy = 9;
+		gbc_btnProg.gridwidth = 4;
+		gbc_btnProg.anchor = GridBagConstraints.CENTER;
+		add(progressBar, gbc_btnProg);
+		/*
+		 * end progress bar
+		 */
+		
+		
 		/*
 		 * Calculate Buttons
 		 */
@@ -434,7 +460,7 @@ public class SystemTab extends JPanel implements Serializable {
 		/*
 		 * End chart
 		 */
-
+		
 		createListeners();
 	}
 
@@ -534,6 +560,7 @@ public class SystemTab extends JPanel implements Serializable {
 	private void createListeners() {
 		final JFileChooser jf = new JFileChooser();
 		tableModel.addTableModelListener(tableListener);
+		
 		setNameButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -739,12 +766,25 @@ public class SystemTab extends JPanel implements Serializable {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				double[] empty = {};
+				dat.gofr = empty;
+				empty = new double[0];
+				dat.rough_gofr = empty;
+				boolean [] arr = {false, false};
+				dat.show = arr;
 				new DiscreteThread().execute();
 			}
 		});
 		rdfButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				double[] empty = {};
+				dat.gofr = empty;
+				empty = new double[0];
+				dat.rough_gofr = empty;
+				boolean [] arr = {false, false};
+				dat.show = arr;
+				parent.somethingChanged();
 				dat.packingFraction = packingFraction;
 				SwingWorker<Void, Void> sw = new SwingWorker<Void, Void>() {
 					boolean flag = true;
@@ -798,8 +838,8 @@ public class SystemTab extends JPanel implements Serializable {
 						if (Math.abs(potentials.get(size)) > 0.0001) {
 							int abc = JOptionPane.showOptionDialog(
 									getRootPane(),
-									Messages.getString("SystemTab.uGreaterThan"), //$NON-NLS-1$
-									"U != 0", JOptionPane.YES_NO_OPTION, //$NON-NLS-1$
+									Messages.getString("SystemTab.uGreaterThan"), 
+									"U != 0", JOptionPane.YES_NO_OPTION,
 									JOptionPane.WARNING_MESSAGE, null, null,
 									null);
 							if (abc == JOptionPane.NO_OPTION) {
@@ -824,10 +864,22 @@ public class SystemTab extends JPanel implements Serializable {
 							dat.given_r[i] = radii.get(i);
 							dat.given_v[i] = potentials.get(i);
 						}
+						progressBar.setValue(0);
 						new DiscretePotential().discretePotential(dat, numR,
 								deltaR);
-						new TlReadParams().tlReadParams(packingFraction,
+						progressBar.setMaximum(dat.lambda.length);
+						TlReadParams trp = new TlReadParams(packingFraction,
 								dat.epsilon, dat.lambda, dat.r, dat);
+						trp.addPropertyChangeListener(SystemTab.this);
+						ExecutorService e = Executors
+								.newFixedThreadPool(1);
+						e.execute(trp);
+						try {
+							e.shutdown();
+							e.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
 						new SmoothGofr().smoothGofr(dat.lambda, dat);
 						return null;
 					}
@@ -975,15 +1027,22 @@ public class SystemTab extends JPanel implements Serializable {
 					}
 					ArrayList<double[][]> RYVals = new ArrayList<>();
 					double[][] cont = { dat.given_r, dat.given_v };
-					String[] name = { "Smooth" }; //$NON-NLS-1$
+					String[] name = { "Smooth" }; 
 					RYVals.add(cont);
-					chartFrame = new EmbeddedChart("Pair Potential, u(r)", //$NON-NLS-1$
+					chartFrame = new EmbeddedChart("Pair Potential, u(r)", 
 							name, RYVals, false);
 					return null;
 				}
 
 				@Override
 				protected void done() {
+					double[] empty = {};
+					dat.gofr = empty;
+					empty = new double[0];
+					dat.rough_gofr = empty;
+					boolean [] arr = {false, false};
+					dat.show = arr;
+					parent.somethingChanged();
 					me.add(chartFrame.getContentPane(), chartConstraint);
 					me.revalidate();
 					me.repaint();
@@ -993,7 +1052,18 @@ public class SystemTab extends JPanel implements Serializable {
 			};
 			work.execute();
 		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if ("progress" == evt.getPropertyName()) {
+            int progress = (Integer) evt.getNewValue();
+            progressBar.setValue(progress);
+            System.out.println(progress);
+        } 
+		
 	};
+	
 }
 
 class Pair implements Comparable<Pair> {
