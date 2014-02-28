@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -947,6 +948,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 							potentialsTable.revalidate();
 							potentialsTable.repaint();
 							tableUpdate();
+							System.out.println("Lambdas:  " + Arrays.toString(dat.lambda));
 						}
 					};
 					sw.execute();

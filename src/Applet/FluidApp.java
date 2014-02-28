@@ -281,6 +281,10 @@ public class FluidApp extends JApplet implements Serializable {
 							new FileInputStream(jf.getSelectedFile()));) {
 						SystemTab tab = (SystemTab) is.readObject();
 						tab.parent = FluidApp.this;
+						if(tab.getName().matches("System \\d+")){
+							tab.dat.name = "System " + i++;
+							tab.setName(tab.dat.name);
+						}
 						dats.systems.add(tab.dat);
 						systems.add(tab);
 						compare.systemUpdate();
