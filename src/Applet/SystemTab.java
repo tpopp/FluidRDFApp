@@ -43,13 +43,15 @@ import javax.swing.table.DefaultTableModel;
 import calculations.Data;
 import calculations.DiscretePotential;
 import calculations.SmoothGofr;
+import calculations.ThermodynamicProperties;
 import calculations.TlReadParams;
 
 /**
  * @author Tres
  * 
  */
-public class SystemTab extends JPanel implements Serializable, PropertyChangeListener {
+public class SystemTab extends JPanel implements Serializable,
+		PropertyChangeListener {
 
 	/**
 	 * 
@@ -63,8 +65,9 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 	private JTextField numRField;
 	private JTextField deltaRField;
 	private JTextField rMaxField;
-	private double packingFraction = 0.4, numberDensity = packingFraction * 6
-			/ Math.PI, epsMax = 0.1, deltaR = 0.01, maxR = 10.0;
+	private double packingFraction = 0.4;
+	double numberDensity = packingFraction * 6 / Math.PI, epsMax = 0.1,
+			deltaR = 0.01, maxR = 10.0;
 	private int numR = 1_000;
 
 	private SystemTab me;
@@ -83,7 +86,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 	private JButton rMaxHint;
 	private JButton newWindowButton;
 	private JButton btnRestoreButton;
-	private JButton rdfButton;
+	private final JButton rdfButton;
 	private JButton btnLoad;
 	private JButton terraceButton;
 	private JButton deltaEpsHint;
@@ -100,11 +103,12 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 	public SystemTab(final int i, final FluidApp parent, final JFileChooser fc,
 			Data data) {
 		dat = data;
+		dat.density = numberDensity;
 		dat.max_deps = epsMax;
 		me = this;
 		this.parent = parent;
 		this.i = i;
-		setName("System " + (i + 1)); 
+		setName("System " + (i + 1));
 
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 109, 28, 0, 31, 0, 0, 0 };
@@ -118,7 +122,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		/*
 		 * Nickname
 		 */
-		JLabel lblNewLabel = new JLabel("Nickname"); 
+		JLabel lblNewLabel = new JLabel("Nickname");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
@@ -126,7 +130,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		gbc_lblNewLabel.gridy = 0;
 		add(lblNewLabel, gbc_lblNewLabel);
 
-		setNameButton = new JButton("Set"); 
+		setNameButton = new JButton("Set");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.EAST;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
@@ -135,8 +139,8 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		add(setNameButton, gbc_btnNewButton);
 
 		txtSystem = new JTextField();
-		txtSystem.setText("System " + (i + 1)); 
-		dat.name = "System " + (i + 1); 
+		txtSystem.setText("System " + (i + 1));
+		dat.name = "System " + (i + 1);
 		GridBagConstraints gbc_txtSystem = new GridBagConstraints();
 		gbc_txtSystem.insets = new Insets(0, 0, 5, 5);
 		gbc_txtSystem.fill = GridBagConstraints.HORIZONTAL;
@@ -184,6 +188,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 
 		tableModel.setColumnCount(2);
 		potentialsTable = new JTable(tableModel);
+		potentialsTable.getTableHeader().setReorderingAllowed(false);
 		potentialsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		potentialsTable.setRowSelectionAllowed(false);
 		GridBagConstraints gbc_table_1 = new GridBagConstraints();
@@ -373,7 +378,6 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		 * End r max
 		 */
 
-		
 		/*
 		 * progress bar
 		 */
@@ -390,13 +394,12 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		/*
 		 * end progress bar
 		 */
-		
-		
+
 		/*
 		 * Calculate Buttons
 		 */
 
-		newWindowButton = new JButton("Popout"); //$NON-NLS-1$
+		newWindowButton = new JButton("Popout");
 		GridBagConstraints gbc_btnNW = new GridBagConstraints();
 		gbc_btnNW.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNW.gridx = 5;
@@ -404,7 +407,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		gbc_btnNW.anchor = GridBagConstraints.EAST;
 		add(newWindowButton, gbc_btnNW);
 
-		btnRestoreButton = new JButton("Restore"); //$NON-NLS-1$
+		btnRestoreButton = new JButton("Restore");
 		GridBagConstraints gbcRNewButton = new GridBagConstraints();
 		gbcRNewButton.anchor = GridBagConstraints.EAST;
 		gbcRNewButton.insets = new Insets(0, 0, 5, 0);
@@ -449,7 +452,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		RYVals.add(cont);
 		RYVals.add(disc);
 
-		chartFrame = new EmbeddedChart("Pair Potential, u(r)", names, RYVals, //$NON-NLS-1$
+		chartFrame = new EmbeddedChart("Pair Potential, u(r)", names, RYVals,
 				false);
 		chartConstraint = new GridBagConstraints();
 		chartConstraint.weighty = 1.0;
@@ -461,7 +464,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		/*
 		 * End chart
 		 */
-		
+
 		createListeners();
 	}
 
@@ -561,7 +564,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 	private void createListeners() {
 		final JFileChooser jf = new JFileChooser();
 		tableModel.addTableModelListener(tableListener);
-		
+
 		setNameButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -596,6 +599,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 				}
 				packingFraction = n;
 				numberDensity = n * 6.0 / Math.PI;
+				dat.density = numberDensity;
 				numDensityField.setText(String.format("%.4f", numberDensity));
 
 			}
@@ -736,7 +740,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 				}
 				maxR = n;
 				deltaR = maxR / numR;
-				deltaRField.setText(String.format("%.4f", deltaR)); 
+				deltaRField.setText(String.format("%.4f", deltaR));
 
 			}
 
@@ -771,7 +775,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 				dat.gofr = empty;
 				empty = new double[0];
 				dat.rough_gofr = empty;
-				boolean [] arr = {false, false};
+				boolean[] arr = { false, false };
 				dat.show = arr;
 				new DiscreteThread().execute();
 			}
@@ -779,20 +783,21 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 		rdfButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dat.dr = deltaR;
 				double[] empty = {};
 				dat.gofr = empty;
 				empty = new double[0];
 				dat.rough_gofr = empty;
-				boolean [] arr = {false, false};
+				boolean[] arr = { false, false };
 				dat.show = arr;
 				parent.somethingChanged();
 				dat.packingFraction = packingFraction;
+				rdfButton.setEnabled(false);
 				SwingWorker<Void, Void> sw = new SwingWorker<Void, Void>() {
 					boolean flag = true;
 
 					@Override
 					protected Void doInBackground() throws Exception {
-						rdfButton.setEnabled(false);
 						List<Double> radii = new LinkedList<>();
 						List<Double> potentials = new LinkedList<>();
 						PriorityQueue<Pair> pq = new PriorityQueue<>();
@@ -839,7 +844,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 						if (Math.abs(potentials.get(size)) > 0.0001) {
 							int abc = JOptionPane.showOptionDialog(
 									getRootPane(),
-									Messages.getString("SystemTab.uGreaterThan"), 
+									Messages.getString("SystemTab.uGreaterThan"),
 									"U != 0", JOptionPane.YES_NO_OPTION,
 									JOptionPane.WARNING_MESSAGE, null, null,
 									null);
@@ -872,8 +877,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 						TlReadParams trp = new TlReadParams(packingFraction,
 								dat.epsilon, dat.lambda, dat.r, dat);
 						trp.addPropertyChangeListener(SystemTab.this);
-						ExecutorService e = Executors
-								.newFixedThreadPool(1);
+						ExecutorService e = Executors.newFixedThreadPool(1);
 						e.execute(trp);
 						try {
 							e.shutdown();
@@ -882,16 +886,20 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 							e1.printStackTrace();
 						}
 						new SmoothGofr().smoothGofr(dat.lambda, dat);
+						ThermodynamicProperties.calculate(dat);
+						dat.thermo = true;
 						return null;
 					}
 
 					@Override
 					protected void done() {
+						rdfButton.setEnabled(true);
+						SystemTab.this.revalidate();
+						SystemTab.this.repaint();
+						System.out.println("Done!!!");
 						if (flag) {
 							tableUpdate();
-							parent.somethingChanged();
 						}
-						rdfButton.setEnabled(true);
 					}
 
 				};
@@ -948,7 +956,8 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 							potentialsTable.revalidate();
 							potentialsTable.repaint();
 							tableUpdate();
-							System.out.println("Lambdas:  " + Arrays.toString(dat.lambda));
+							System.out.println("Lambdas:  "
+									+ Arrays.toString(dat.lambda));
 						}
 					};
 					sw.execute();
@@ -1029,9 +1038,9 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 					}
 					ArrayList<double[][]> RYVals = new ArrayList<>();
 					double[][] cont = { dat.given_r, dat.given_v };
-					String[] name = { "Smooth" }; 
+					String[] name = { "Smooth" };
 					RYVals.add(cont);
-					chartFrame = new EmbeddedChart("Pair Potential, u(r)", 
+					chartFrame = new EmbeddedChart("Pair Potential, u(r)",
 							name, RYVals, false);
 					return null;
 				}
@@ -1042,7 +1051,7 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 					dat.gofr = empty;
 					empty = new double[0];
 					dat.rough_gofr = empty;
-					boolean [] arr = {false, false};
+					boolean[] arr = { false, false };
 					dat.show = arr;
 					parent.somethingChanged();
 					me.add(chartFrame.getContentPane(), chartConstraint);
@@ -1059,13 +1068,13 @@ public class SystemTab extends JPanel implements Serializable, PropertyChangeLis
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("progress" == evt.getPropertyName()) {
-            int progress = (Integer) evt.getNewValue();
-            progressBar.setValue(progress);
-            System.out.println(progress);
-        } 
-		
+			int progress = (Integer) evt.getNewValue();
+			progressBar.setValue(progress);
+			System.out.println(progress);
+		}
+
 	};
-	
+
 }
 
 class Pair implements Comparable<Pair> {

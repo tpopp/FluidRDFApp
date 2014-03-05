@@ -54,6 +54,7 @@ public class FluidApp extends JApplet implements Serializable {
 	private JMenuItem loadSys;
 	private JMenuItem storeSys;
 	private boolean notFirst = false;
+	private ThermodynamicsTab thermo;
 
 	/** 
 	 * 
@@ -105,7 +106,8 @@ public class FluidApp extends JApplet implements Serializable {
 		systems.add(new SystemTab(i++, this, jf, dats.systems.get(0)));
 		compare = new ComparisonTab(FluidApp.this, dats, jf);
 		calculations.add(compare);
-		calculations.add(new ThermodynamicsTab());
+		thermo = new ThermodynamicsTab(dats, this); 
+		calculations.add(thermo);
 		add(systems, gbc);
 
 		gbc = new GridBagConstraints();

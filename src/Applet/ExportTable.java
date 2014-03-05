@@ -104,6 +104,7 @@ public class ExportTable extends JPanel implements Serializable {
 	}
 
 	public void updateChoices() {
+		DefaultTableModel m;
 		tables.clear();
 		for (ItemListener a : comboBox.getItemListeners())
 			comboBox.removeItemListener(a);
@@ -122,19 +123,19 @@ public class ExportTable extends JPanel implements Serializable {
 				vals[j][1] = d.cont_v[j];
 				vals[j][2] = d.disc_v[j];
 			}
-			JTable table = new JTable(vals, headers) {
-				/**
-				 * 
-				 */
+			m = new DefaultTableModelExtension(vals, headers);
+			
+			JTable table = new JTable(m) {
 				private static final long serialVersionUID = -2170582283224273188L;
 				decimalFormat df = new decimalFormat();
-
+				
 				@Override
 				public TableCellRenderer getCellRenderer(int row, int column) {
 					return df;
 				}
 			};
 			String choice = d.name + " potentials";
+			table.getTableHeader().setReorderingAllowed(false);
 			tables.put(choice, table);
 			if (d.gofr.length != 0) {
 				for (int j = 0; j < d.r.length; j++) {
@@ -143,7 +144,8 @@ public class ExportTable extends JPanel implements Serializable {
 					vals2[j][2] = d.rough_gofr[j];
 				}
 				choice = d.name + " RDF";
-				table = new JTable(vals2, headers2) {
+				m = new DefaultTableModelExtension(vals2, headers2);
+				table = new JTable(m) {
 					/**
 					 * 
 					 */
@@ -155,6 +157,7 @@ public class ExportTable extends JPanel implements Serializable {
 						return df;
 					}
 				};
+				table.getTableHeader().setReorderingAllowed(false);
 				tables.put(choice, table);
 			}
 
@@ -203,7 +206,8 @@ public class ExportTable extends JPanel implements Serializable {
 			for (int j = 0; j < values.length; j++)
 				for (int ii = 0; ii < values[0].length; ii++)
 					actual[ii][j] = values[j][ii];
-			table = new JTable(actual, compareNames.toArray(new String[0])) {
+			m = new DefaultTableModelExtension(actual, compareNames.toArray(new String[0]));
+			table = new JTable(m) {
 				/**
 				 * 
 				 */
@@ -216,7 +220,8 @@ public class ExportTable extends JPanel implements Serializable {
 				}
 			};
 		} else {
-			table = new JTable(values, compareNames.toArray(new String[0])) {
+			m = new DefaultTableModelExtension(values, compareNames.toArray(new String[0]));
+			table = new JTable(m) {
 				/**
 				 * 
 				 */
@@ -229,6 +234,7 @@ public class ExportTable extends JPanel implements Serializable {
 				}
 			};
 		}
+		table.getTableHeader().setReorderingAllowed(false);
 		tables.put("Comparisons", table);
 		for (String s : tables.keySet())
 			comboBox.addItem(s);
@@ -277,11 +283,6 @@ public class ExportTable extends JPanel implements Serializable {
 						sb.append('\n');
 						for (int jj = 0; jj < j; jj++) {
 							for (int ii = 0; ii < i; ii++) {
-//								if (table.getValueAt(jj, ii).toString()
-//										.equals("Infinity"))
-//									sb.append(table.getValueAt(jj, ii)
-//											.toString() + '\t');
-//								else
 									sb.append(String.format("%6e\t",
 										table.getValueAt(jj, ii)));
 							}
@@ -296,26 +297,17 @@ public class ExportTable extends JPanel implements Serializable {
 		});
 	}
 
-	class InvertedTable extends DefaultTableModel implements Serializable {
+	private final class DefaultTableModelExtension extends DefaultTableModel {
+		private static final long serialVersionUID = -3217427656490695027L;
 
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 3528002107573489784L;
-
-		public InvertedTable(Double[][] values, String[] array) {
+		private DefaultTableModelExtension(Object[][] data, Object[] columnNames) {
+			super(data, columnNames);
 		}
 
 		@Override
-		public int getColumnCount() {
-			return super.getRowCount();
+		public boolean isCellEditable(int row, int column){
+			return false;
 		}
-
-		@Override
-		public int getRowCount() {
-			return super.getColumnCount();
-		}
-
 	}
 
 	static class decimalFormat extends DefaultTableCellRenderer {
