@@ -57,7 +57,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0 };
-		gridBagLayout.rowHeights = new int[] { 39, 20, 0 };
+		gridBagLayout.rowHeights = new int[] { 120, 20, 0 };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 1.0, };
 		setLayout(gridBagLayout);
 		String[] columns = { "Systems", "Show Properties" };
@@ -100,7 +100,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 	}
 
 	public void updateInfo() {
-		System.err.println("Updating info");
+		mod.refreshTable();
 		DefaultTableModel model = new DefaultTableModel(new Object[0][0],
 				header) {
 
@@ -121,8 +121,8 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 				arr[3] = d.compress;
 				arr[4] = d.isothermCompress;
 				arr[5] = d.twoBodyEntropy;
+				model.addRow(arr);
 			}
-			model.addRow(arr);
 		}
 		information = new JTable(model) {
 			/**
@@ -146,7 +146,6 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 		add(scroll, gbc_scroll2);
 		ThermodynamicsTab.this.revalidate();
 		ThermodynamicsTab.this.repaint();
-		parent.somethingChanged();
 	}
 
 	class SystemsModel extends DefaultTableModel {
@@ -170,6 +169,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 		}
 
 		public void refreshTable() {
+			setRowCount(0);
 			for (Data d : systems.systems) {
 				Object[] arr = new Object[2];
 				arr[0] = d.name;
@@ -193,7 +193,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 				if (row == -1 || col == -1)
 					return;
 				Boolean value = (Boolean) mod.getValueAt(row, col);
-				Data temp = systems.systems.get(col - 1);
+				Data temp = systems.systems.get(row);
 				temp.thermo = value;
 				updateInfo();
 			}
@@ -219,7 +219,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 						sb.append('\n');
 						for (int jj = 0; jj < j; jj++) {
 							for (int ii = 0; ii < i; ii++) {
-									sb.append(String.format("%6e\t",
+									sb.append(String.format("%6s\t",
 										information.getValueAt(jj, ii)));
 							}
 							sb.append('\n');

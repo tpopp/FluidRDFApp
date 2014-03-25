@@ -621,6 +621,12 @@ public class SystemTab extends JPanel implements Serializable,
 						numDensityField.setText("" + numberDensity);
 						return;
 					}
+					if (n >= 1.413) {
+						JOptionPane.showMessageDialog(getRootPane(),
+								"Number density should be less than 1.413");
+						numDensityField.setText("" + packingFraction);
+						return;
+					}
 				} catch (Exception e) {
 
 				}

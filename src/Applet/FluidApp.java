@@ -53,7 +53,6 @@ public class FluidApp extends JApplet implements Serializable {
 	private JMenuItem removeSys;
 	private JMenuItem loadSys;
 	private JMenuItem storeSys;
-	private boolean notFirst = false;
 	private ThermodynamicsTab thermo;
 
 	/** 
@@ -64,11 +63,11 @@ public class FluidApp extends JApplet implements Serializable {
 		final JFileChooser jf = new JFileChooser();
 		// menubar
 		JMenuBar menu = new JMenuBar();
-		JMenu options = new JMenu("Systems"); 
-		newSystem = new JMenuItem(Messages.getString("FluidApp.newSystem")); 
-		removeSys = new JMenuItem(Messages.getString("FluidApp.removeSystem")); 
+		JMenu options = new JMenu("Systems");
+		newSystem = new JMenuItem(Messages.getString("FluidApp.newSystem"));
+		removeSys = new JMenuItem(Messages.getString("FluidApp.removeSystem"));
 		store = new JMenuItem(Messages.getString("FluidApp.storeState"));
-		load = new JMenuItem(Messages.getString("FluidApp.loadState")); 
+		load = new JMenuItem(Messages.getString("FluidApp.loadState"));
 		storeSys = new JMenuItem("Store System");
 		loadSys = new JMenuItem("Load System");
 		JMenu saveLoad = new JMenu("Store/Load");
@@ -106,7 +105,7 @@ public class FluidApp extends JApplet implements Serializable {
 		systems.add(new SystemTab(i++, this, jf, dats.systems.get(0)));
 		compare = new ComparisonTab(FluidApp.this, dats, jf);
 		calculations.add(compare);
-		thermo = new ThermodynamicsTab(dats, this); 
+		thermo = new ThermodynamicsTab(dats, this);
 		calculations.add(thermo);
 		add(systems, gbc);
 
@@ -141,6 +140,7 @@ public class FluidApp extends JApplet implements Serializable {
 	public void somethingChanged() {
 		compare.systemUpdate();
 		table.updateChoices();
+		thermo.updateInfo();
 	}
 
 	public void updateSystems() {
@@ -148,14 +148,15 @@ public class FluidApp extends JApplet implements Serializable {
 	}
 
 	public void newStuff() {
-			compare.revalidate();
-			compare.repaint();
-			systems.getSelectedComponent().revalidate();
-			systems.getSelectedComponent().repaint();
-			table.revalidate();
-			table.repaint();
-			revalidate();
-			repaint();
+		thermo.updateInfo();
+		compare.revalidate();
+		compare.repaint();
+		systems.getSelectedComponent().revalidate();
+		systems.getSelectedComponent().repaint();
+		table.revalidate();
+		table.repaint();
+		revalidate();
+		repaint();
 	}
 
 	/**
@@ -283,7 +284,7 @@ public class FluidApp extends JApplet implements Serializable {
 							new FileInputStream(jf.getSelectedFile()));) {
 						SystemTab tab = (SystemTab) is.readObject();
 						tab.parent = FluidApp.this;
-						if(tab.getName().matches("System \\d+")){
+						if (tab.getName().matches("System \\d+")) {
 							tab.dat.name = "System " + i++;
 							tab.setName(tab.dat.name);
 						}
