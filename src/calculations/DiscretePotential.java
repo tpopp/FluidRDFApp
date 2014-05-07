@@ -82,28 +82,37 @@ public class DiscretePotential {
 			bb = lambda[i];
 
 			// Zero in on root
-			for (int j = 0; j < jj_max; j++) {
-				cc = (aa + bb) / 2.;
-
-				eps_a = Calc_Potential(aa) - MAX_DEPS / 2.;
-				eps_c = Calc_Potential(cc) - MAX_DEPS / 2.;
-
-				f_a = Root_Func(aa, lambda[i], eps_a);
-				f_c = Root_Func(cc, lambda[i], eps_c);
-
-				if (Math.abs(f_c) < 0.000001)
+//			for (int j = 0; j < jj_max; j++) {
+//				cc = (aa + bb) / 2.;
+//
+//				eps_a = Calc_Potential(aa) - MAX_DEPS / 2.;
+//				eps_c = Calc_Potential(cc) - MAX_DEPS / 2.;
+//
+//				f_a = Root_Func(aa, lambda[i], eps_a);
+//				f_c = Root_Func(cc, lambda[i], eps_c);
+//
+//				if (Math.abs(f_c) < 0.000001)
+//					break;
+//
+//				else {
+//					if (f_a * f_c > 0.0)
+//						aa = cc;
+//					else
+//						bb = cc;
+//				}
+//
+//			}
+			double j, eps;
+			for(j = bb - dr/10.0; j > 1.0; j -= dr/10.0){
+				eps = Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) > 0 ? MAX_DEPS/2.0 : -MAX_DEPS/2.0;
+				if(Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) > 0 && Root_Func(j, bb, Math.abs(Calc_Potential(j))-eps) < 0 ||
+						Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) < 0 && Root_Func(j, bb, Math.abs(Calc_Potential(j))-eps) > 0){
 					break;
-
-				else {
-					if (f_a * f_c > 0.0)
-						aa = cc;
-					else
-						bb = cc;
 				}
 			}
 
 			// store lambda and epsilon values for decided distance
-			lambda[i - 1] = cc;
+			lambda[i - 1] = j;
 
 			if (lambda[i - 1] < 1.0)
 				lambda[i - 1] = 1.0;
@@ -118,6 +127,7 @@ public class DiscretePotential {
 				break;
 			}
 		}
+		System.out.println("Nsteps:  " + nsteps);
 
 		// reassign lambdas and epsilons to the front of their arrays.
 		for (int i = 0; i < nsteps; i++) {
@@ -189,8 +199,11 @@ public class DiscretePotential {
 		dat.epsilon = Arrays.copyOf(epsilon, nsteps);
 		dat.lambda = Arrays.copyOf(lambda, nsteps);
 		dat.r = r;
+		System.err.println(Arrays.toString(dat.lambda));
 		System.err.println(Arrays.toString(dat.epsilon));
-		System.err.println(Arrays.toString(epsilon));
+		System.out.println(integrals[integrals.length-1]);
+		System.out.println(Calc_Integral(dat.lambda[0]));
+		System.out.println(Calc_Integral(dat.lambda[1]));
 	}
 
 	/**
@@ -226,7 +239,7 @@ public class DiscretePotential {
 	private double Root_Func(double a, double lambda_n, double eps) {
 		double return_val;
 
-		return_val = Calc_Integral(lambda_n) - Calc_Integral(a) - eps
+		return_val = Math.abs(Calc_Integral(lambda_n) - Calc_Integral(a)) - eps
 				* (lambda_n - a);
 
 		return return_val;

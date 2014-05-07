@@ -61,7 +61,7 @@ public class ExportTable extends JPanel implements Serializable {
 		JLabel lblDataLabels = new JLabel("Data");
 		GridBagConstraints gbc_lblDataLabels = new GridBagConstraints();
 		gbc_lblDataLabels.anchor = GridBagConstraints.WEST;
-		gbc_lblDataLabels.insets = new Insets(0, 2, 5, 5);
+		gbc_lblDataLabels.insets = new Insets(0, 3, 5, 5);
 		gbc_lblDataLabels.gridx = 0;
 		gbc_lblDataLabels.gridy = 0;
 		add(lblDataLabels, gbc_lblDataLabels);

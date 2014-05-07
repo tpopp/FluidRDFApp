@@ -68,7 +68,7 @@ public class ComparisonTab extends JPanel implements Serializable {
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.gridwidth = 3;
 		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel.insets = new Insets(0, 2, 5, 0);
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 0;
 		add(lblNewLabel, gbc_lblNewLabel);
@@ -100,7 +100,7 @@ public class ComparisonTab extends JPanel implements Serializable {
 		GridBagConstraints gbc_lblRadialDistributionFunctions = new GridBagConstraints();
 		gbc_lblRadialDistributionFunctions.gridwidth = 2;
 		gbc_lblRadialDistributionFunctions.anchor = GridBagConstraints.WEST;
-		gbc_lblRadialDistributionFunctions.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRadialDistributionFunctions.insets = new Insets(0, 2, 5, 5);
 		gbc_lblRadialDistributionFunctions.gridx = 0;
 		gbc_lblRadialDistributionFunctions.gridy = 2;
 		add(lblRadialDistributionFunctions, gbc_lblRadialDistributionFunctions);
@@ -112,14 +112,6 @@ public class ComparisonTab extends JPanel implements Serializable {
 		gbc_btnNWButton.gridx = 2;
 		gbc_btnNWButton.gridy = 2;
 		add(newWindowButton, gbc_btnNWButton);
-
-		btnNewButton = new JButton("Restore");
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.anchor = GridBagConstraints.EAST;
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton.gridx = 1;
-		gbc_btnNewButton.gridy = 2;
-		add(btnNewButton, gbc_btnNewButton);
 
 		String[] names = {};
 		ArrayList<double[][]> RYVals = new ArrayList<>();
@@ -216,15 +208,6 @@ public class ComparisonTab extends JPanel implements Serializable {
 	}
 
 	private void createListeners() {
-		btnNewButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				panel.restore();
-
-			}
-		});
-
 		newWindowButton.addActionListener(new ActionListener() {
 
 			@Override

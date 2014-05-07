@@ -9,7 +9,7 @@ import javax.swing.SwingWorker;
 
 public class TlReadParams extends SwingWorker<Void, Void> {
 	private Integer progress = 0;
-	private double phi;
+	private double phi, beta;
 	private double[] epsilon, lambda, r_dmd;
 	Data dat;
 
@@ -85,6 +85,8 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 			Data dat) {
 		progress = 0;
 		setProgress(0);
+		
+		beta = 1 / dat.temp;
 
 		final tanglu_constants tlc = new tanglu_constants();
 
@@ -174,7 +176,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 					}
 					synchronized (progress) {
 						progress++;
-						setProgress(progress);
+						setProgress(progress*100/lambda.length);
 					}
 				}
 
@@ -320,7 +322,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 	 *            constants
 	 * @return square well RDF calculation
 	 */
-	private static Complex g1sw(double r, double epsilon, double lambda,
+	private Complex g1sw(double r, double epsilon, double lambda,
 			tanglu_constants tlc) {
 		int n = 0;
 		boolean nloop = true;
@@ -350,7 +352,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 				nloop = false;
 		}
 
-		g1sw_val = g1sw_val.times(-epsilon * Math.pow(1. - tlc.eta, 8.) / r);
+		g1sw_val = g1sw_val.times(beta * -epsilon * Math.pow(1. - tlc.eta, 8.) / r);
 
 		return g1sw_val;
 	}

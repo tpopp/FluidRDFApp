@@ -32,4 +32,5 @@ public class Data implements Serializable  {
 	public double compress;
 	public double density;
 	public boolean thermo = false;
+	public double temp;
 }
