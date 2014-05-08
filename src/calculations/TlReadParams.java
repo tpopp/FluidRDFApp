@@ -175,8 +175,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 							break;
 					}
 					synchronized (progress) {
-						progress++;
-						setProgress(progress*100/lambda.length);
+						setProgress(++progress);
 					}
 				}
 

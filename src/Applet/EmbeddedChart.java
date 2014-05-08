@@ -28,6 +28,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -271,7 +272,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 			chart.removeLegend();
 			plot.addAnnotation(xyta);
 
-		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
 		plot.setRenderer(renderer);
 
 		return chart;
