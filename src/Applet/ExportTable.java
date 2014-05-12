@@ -274,7 +274,7 @@ public class ExportTable extends JPanel implements Serializable {
 				if (n == JFileChooser.APPROVE_OPTION) {
 					try (BufferedWriter bw = new BufferedWriter(new FileWriter(
 							jf.getSelectedFile()))) {
-						StringBuilder sb = new StringBuilder();
+						StringBuilder sb = new StringBuilder("#");
 						int i = table.getColumnCount();
 						int j = table.getRowCount();
 						for (int ii = 0; ii < i; ii++) {

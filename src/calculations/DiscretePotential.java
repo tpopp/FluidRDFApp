@@ -102,6 +102,7 @@ public class DiscretePotential {
 //				}
 //
 //			}
+			
 			double j, eps;
 			for(j = bb - dr/10.0; j > 1.0; j -= dr/10.0){
 				eps = Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) > 0 ? MAX_DEPS/2.0 : -MAX_DEPS/2.0;
@@ -201,9 +202,6 @@ public class DiscretePotential {
 		dat.r = r;
 		System.err.println(Arrays.toString(dat.lambda));
 		System.err.println(Arrays.toString(dat.epsilon));
-		System.out.println(integrals[integrals.length-1]);
-		System.out.println(Calc_Integral(dat.lambda[0]));
-		System.out.println(Calc_Integral(dat.lambda[1]));
 	}
 
 	/**

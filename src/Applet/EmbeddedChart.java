@@ -84,7 +84,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 	public void updateInfo(String[] legends, List<double[][]> yVals,
 			boolean gofr) {
 		removeAll();
-		XYDataset dataset = createDataset(legends, yVals);
+		XYDataset dataset = createDataset(gofr, legends, yVals);
 		JFreeChart chart = createChart(dataset, title, gofr);
 		chartPanel = new ChartPanel(chart);
 		chartPanel.setMinimumDrawWidth(0);
@@ -110,15 +110,17 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		
 		final NumberAxis domain = (NumberAxis) ((XYPlot) chartPanel.getChart()
 				.getPlot()).getDomainAxis();
+		domain.setUpperBound(2.5);
 		final NumberAxis range = (NumberAxis) ((XYPlot) chartPanel.getChart()
 				.getPlot()).getRangeAxis();
+		range.setUpperBound(5);
 		
 		gbcX2.gridx = 2;
 		gbcX2.gridy = 2;
 		gbcX2.anchor = GridBagConstraints.EAST;
 		gbcX2.insets = new Insets(0, 0, 0, 12);
 		final JTextField xMax = new JTextField(5);
-		xMax.setMinimumSize(new Dimension(30, 20));
+		xMax.setMinimumSize(new Dimension(50, 20));
 		xMax.setText(""+domain.getUpperBound());
 //		gbcX2.fill = GridBagConstraints.VERTICAL;
 		add(xMax, gbcX2);
@@ -139,7 +141,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		gbcX1.anchor = GridBagConstraints.WEST;
 		gbcX1.insets = new Insets(0, 70, 0, 0);
 		final JTextField xMin = new JTextField(5);
-		xMin.setMinimumSize(new Dimension(30, 20));
+		xMin.setMinimumSize(new Dimension(50, 20));
 		xMin.setText(""+domain.getLowerBound());
 //		gbcX1.fill = GridBagConstraints.VERTICAL;
 		add(xMin, gbcX1);
@@ -161,7 +163,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		gbcY1.anchor = GridBagConstraints.SOUTH;
 		gbcY1.insets = new Insets(0, 0, 45, 0);
 		final JTextField yMin = new JTextField(5);
-		yMin.setMinimumSize(new Dimension(30, 20));
+		yMin.setMinimumSize(new Dimension(50, 20));
 		yMin.setText(""+range.getLowerBound());
 //		gbcY1.fill = GridBagConstraints.BOTH;
 		add(yMin, gbcY1);
@@ -182,7 +184,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		gbcY2.anchor = GridBagConstraints.NORTH;
 		gbcY2.insets = new Insets(10, 0, 0, 0);
 		final JTextField yMax = new JTextField(5);
-		yMax.setMinimumSize(new Dimension(30, 20));
+		yMax.setMinimumSize(new Dimension(50, 20));
 		yMax.setText(""+range.getUpperBound());
 //		gbcY2.fill = GridBagConstraints.BOTH;
 		add(yMax, gbcY2);
@@ -205,12 +207,18 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 	 * 
 	 * @return a sample dataset.
 	 */
-	private XYDataset createDataset(String[] legends, List<double[][]> yVals) {
+	private XYDataset createDataset(boolean gofr, String[] legends, List<double[][]> yVals) {
 
 		final XYSeriesCollection dataset = new XYSeriesCollection();
 		XYSeries series;
 		for (int i = 0; i < legends.length; i++) {
 			series = new XYSeries(legends[i]);
+			if(gofr){
+				series.add(0,0);
+				series.add(1, 0);
+			}else{
+				series.add(1, 1000);
+			}
 			double[][] arr = yVals.get(i);
 			int j = 0;
 			while (j < arr[0].length && arr[0][j] < 1)
@@ -247,7 +255,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		// create the chart...
 		final JFreeChart chart = ChartFactory.createXYLineChart(null, // chart
 																		// title
-				"Radial Distance r", // x axis label
+				"Radial Distance,  r/\u03c3", // x axis label
 				title, // y axis label
 				dataset, // data
 				PlotOrientation.VERTICAL, true, // include legend

@@ -115,7 +115,7 @@ public class ComparisonTab extends JPanel implements Serializable {
 
 		String[] names = {};
 		ArrayList<double[][]> RYVals = new ArrayList<>();
-		panel = new EmbeddedChart("RDF, g(r)", names, RYVals, true);
+		panel = new EmbeddedChart("Radial distribution function,  g(r)", names, RYVals, true);
 		gbc_panel = new GridBagConstraints();
 		gbc_panel.weighty = 0.75;
 		gbc_panel.gridwidth = 3;

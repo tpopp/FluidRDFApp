@@ -77,8 +77,8 @@ public class SystemTab extends JPanel implements Serializable,
 	protected Data dat;
 	private EmbeddedChart chartFrame;
 	private String[] names = new String[] {
-			Messages.getString("SystemTab.ContinuousLegend"),
-			Messages.getString("SystemTab.terracedLegend") };
+			Messages.getString("SystemTab.terracedLegend"),
+			Messages.getString("SystemTab.ContinuousLegend")};
 	private GridBagConstraints chartConstraint;
 	private List<Double> listr = new ArrayList<Double>();
 	private List<Double> listv = new ArrayList<Double>();
@@ -135,11 +135,11 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_lblNewLabel.gridy = 0;
 		add(lblNewLabel, gbc_lblNewLabel);
 
-		setNameButton = new JButton("Set");
+		setNameButton = new JButton("  Set ");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.EAST;
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton.gridx = 2;
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 2);
+		gbc_btnNewButton.gridx = 5;
 		gbc_btnNewButton.gridy = 0;
 		add(setNameButton, gbc_btnNewButton);
 
@@ -149,10 +149,21 @@ public class SystemTab extends JPanel implements Serializable,
 		GridBagConstraints gbc_txtSystem = new GridBagConstraints();
 		gbc_txtSystem.insets = new Insets(0, 0, 5, 5);
 		gbc_txtSystem.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtSystem.gridx = 0;
-		gbc_txtSystem.gridy = 1;
+		gbc_txtSystem.gridx = 1;
+		gbc_txtSystem.gridy = 0;
+		gbc_txtSystem.gridwidth = 4;
 		add(txtSystem, gbc_txtSystem);
 		txtSystem.setColumns(10);
+		
+		JLabel parameters = new JLabel("System Parameters");
+		GridBagConstraints gbc_paramLabel = new GridBagConstraints();
+		gbc_paramLabel.anchor = GridBagConstraints.WEST;
+		gbc_paramLabel.insets = new Insets(0, 2, 5, 5);
+		gbc_paramLabel.gridx = 0;
+		gbc_paramLabel.gridy = 1;
+		gbc_paramLabel.gridwidth = 2;
+		add(parameters, gbc_paramLabel);
+		
 		/*
 		 * End Nickname
 		 */
@@ -165,7 +176,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.gridx = 3;
-		gbc_lblNewLabel_1.gridy = 0;
+		gbc_lblNewLabel_1.gridy = 1;
 		add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		String[] headers = {
@@ -186,9 +197,9 @@ public class SystemTab extends JPanel implements Serializable,
 		btnLoad = new JButton("Load"); //$NON-NLS-1$
 		GridBagConstraints gbc_btnLoad = new GridBagConstraints();
 		gbc_btnLoad.anchor = GridBagConstraints.EAST;
-		gbc_btnLoad.insets = new Insets(0, 0, 5, 0);
+		gbc_btnLoad.insets = new Insets(0, 0, 5, 2);
 		gbc_btnLoad.gridx = 5;
-		gbc_btnLoad.gridy = 0;
+		gbc_btnLoad.gridy = 1;
 		add(btnLoad, gbc_btnLoad);
 
 		tableModel.setColumnCount(2);
@@ -197,12 +208,18 @@ public class SystemTab extends JPanel implements Serializable,
 		potentialsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		potentialsTable.setRowSelectionAllowed(false);
 		GridBagConstraints gbc_table_1 = new GridBagConstraints();
-		gbc_table_1.gridheight = 8;
+		gbc_table_1.gridheight = 7;
 		gbc_table_1.gridwidth = 3;
 		gbc_table_1.insets = new Insets(0, 0, 5, 0);
 		gbc_table_1.fill = GridBagConstraints.BOTH;
 		gbc_table_1.gridx = 3;
-		gbc_table_1.gridy = 1;
+		gbc_table_1.gridy = 2;
+		tableModel.addRow(new Object[] {new Double(1), new Double(0)});
+		tableModel.addRow(new Object[] {new Double(2), new Double(0)});
+		listr.add(1.);
+		listr.add(2.);
+		listv.add(0.);
+		listv.add(0.);
 		tableModel.addRow(new Object[] {});
 		JScrollPane tableContainer = new JScrollPane(potentialsTable);
 		tableContainer.setPreferredSize(new Dimension(453, 128));
@@ -215,7 +232,7 @@ public class SystemTab extends JPanel implements Serializable,
 		 * Temperature
 		 */
 		
-		JLabel lbl_temp = new JLabel("<html><p style=\"white-space:nowrap\"> k<sub>B</sub>T</p></html>");
+		JLabel lbl_temp = new JLabel("<html><p style=\"white-space:nowrap\">Temperature, <i>k</i><sub>B</sub><i>T</i></p></html>");
 		GridBagConstraints gbc_temp = new GridBagConstraints();
 		gbc_temp.anchor = GridBagConstraints.WEST;
 		gbc_temp.insets = new Insets(0, 2, 5, 5);
@@ -248,7 +265,7 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Packing Fraction
 		 */
-		JLabel lblNewLabel_3 = new JLabel("<html>&eta</html>");
+		JLabel lblNewLabel_3 = new JLabel("<html><p style=\"white-space:nowrap\">Packing Fraction,  <i>&eta</i></p></html>");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
 		gbc_lblNewLabel_3.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_3.insets = new Insets(0, 2, 5, 5);
@@ -279,7 +296,7 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Number Density
 		 */
-		JLabel lblNumberDensity = new JLabel("<html>&rho</html>"); //$NON-NLS-1$
+		JLabel lblNumberDensity = new JLabel("<html><p style=\"white-space:nowrap\">Number Density,  <i>&rho</i></p></html>"); //$NON-NLS-1$
 		GridBagConstraints gbc_lblNumberDensity = new GridBagConstraints();
 		gbc_lblNumberDensity.anchor = GridBagConstraints.WEST;
 		gbc_lblNumberDensity.insets = new Insets(0, 2, 5, 5);
@@ -310,7 +327,7 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Delta Eps Max
 		 */
-		JLabel lblDeltaEpsMax = new JLabel("<html><p style=\"white-space:nowrap\">\u0394 &epsilon<sup>max</sup></p></html>"); 
+		JLabel lblDeltaEpsMax = new JLabel("<html><p style=\"white-space:nowrap\">\u0394 <i>&epsilon</i><sup>max</sup></p></html>"); 
 		GridBagConstraints gbc_lblDeltaEpsMax = new GridBagConstraints();
 		gbc_lblDeltaEpsMax.anchor = GridBagConstraints.WEST;
 		gbc_lblDeltaEpsMax.insets = new Insets(0, 2, 5, 5);
@@ -341,19 +358,19 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Number of r points
 		 */
-		JLabel lblNewLabel_5 = new JLabel("<html>n<sub>r</sub></html>"); //$NON-NLS-1$
+		JLabel lblNewLabel_5 = new JLabel("<html><i>n</i><sub>r</sub></html>"); //$NON-NLS-1$
 		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
 		gbc_lblNewLabel_5.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_5.insets = new Insets(0, 2, 5, 5);
 		gbc_lblNewLabel_5.gridx = 0;
-		gbc_lblNewLabel_5.gridy = 6;
+		gbc_lblNewLabel_5.gridy = 7;
 		add(lblNewLabel_5, gbc_lblNewLabel_5);
 
 		numRHint = new JButton("?"); //$NON-NLS-1$
 		GridBagConstraints gbc_button_2 = new GridBagConstraints();
 		gbc_button_2.insets = new Insets(0, 0, 5, 5);
 		gbc_button_2.gridx = 1;
-		gbc_button_2.gridy = 6;
+		gbc_button_2.gridy = 7;
 		add(numRHint, gbc_button_2);
 
 		numRField = new JTextField();
@@ -363,7 +380,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_4.gridx = 2;
-		gbc_textField_4.gridy = 6;
+		gbc_textField_4.gridy = 7;
 		add(numRField, gbc_textField_4);
 		/*
 		 * End number of r points
@@ -372,19 +389,19 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Delta r
 		 */
-		JLabel lblDeltaR = new JLabel("<html><p style=\"white-space:nowrap\">\u0394 r </p></html>"); //$NON-NLS-1$
+		JLabel lblDeltaR = new JLabel("<html><p style=\"white-space:nowrap\">\u0394 <i>r</i> </p></html>"); //$NON-NLS-1$
 		GridBagConstraints gbc_lblDeltaR = new GridBagConstraints();
 		gbc_lblDeltaR.anchor = GridBagConstraints.WEST;
 		gbc_lblDeltaR.insets = new Insets(0, 2, 5, 5);
 		gbc_lblDeltaR.gridx = 0;
-		gbc_lblDeltaR.gridy = 7;
+		gbc_lblDeltaR.gridy = 8;
 		add(lblDeltaR, gbc_lblDeltaR);
 
 		deltaRHint = new JButton("?"); //$NON-NLS-1$
 		GridBagConstraints gbc_button_3 = new GridBagConstraints();
 		gbc_button_3.insets = new Insets(0, 0, 5, 5);
 		gbc_button_3.gridx = 1;
-		gbc_button_3.gridy = 7;
+		gbc_button_3.gridy = 8;
 		add(deltaRHint, gbc_button_3);
 
 		deltaRField = new JTextField();
@@ -394,7 +411,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_5.gridx = 2;
-		gbc_textField_5.gridy = 7;
+		gbc_textField_5.gridy = 8;
 		add(deltaRField, gbc_textField_5);
 		/*
 		 * End delta r
@@ -403,19 +420,19 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * R max
 		 */
-		JLabel lblNewLabel_6 = new JLabel("<html>r<sup>max</sup></html>"); //$NON-NLS-1$
+		JLabel lblNewLabel_6 = new JLabel("<html><i>r</i><sup>max</sup></html>"); //$NON-NLS-1$
 		GridBagConstraints gbc_lblNewLabel_6 = new GridBagConstraints();
 		gbc_lblNewLabel_6.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_6.insets = new Insets(0, 2, 5, 5);
 		gbc_lblNewLabel_6.gridx = 0;
-		gbc_lblNewLabel_6.gridy = 8;
+		gbc_lblNewLabel_6.gridy = 6;
 		add(lblNewLabel_6, gbc_lblNewLabel_6);
 
 		rMaxHint = new JButton("?"); //$NON-NLS-1$
 		GridBagConstraints gbc_button_4 = new GridBagConstraints();
 		gbc_button_4.insets = new Insets(0, 0, 5, 5);
 		gbc_button_4.gridx = 1;
-		gbc_button_4.gridy = 8;
+		gbc_button_4.gridy = 6;
 		add(rMaxHint, gbc_button_4);
 
 		rMaxField = new JTextField();
@@ -425,7 +442,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_6.gridx = 2;
-		gbc_textField_6.gridy = 8;
+		gbc_textField_6.gridy = 6;
 		add(rMaxField, gbc_textField_6);
 		/*
 		 * End r max
@@ -461,12 +478,13 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_btnNW.anchor = GridBagConstraints.EAST;
 		add(newWindowButton, gbc_btnNW);
 
-		terraceButton = new JButton("Terrace u(r)");
+		terraceButton = new JButton("Terrace \u03c6(r)");
 		GridBagConstraints gbc_btnT = new GridBagConstraints();
 		gbc_btnT.insets = new Insets(0, 0, 5, 5);
 		gbc_btnT.gridx = 0;
 		gbc_btnT.gridy = 9;
 		gbc_btnT.anchor = GridBagConstraints.WEST;
+		gbc_btnT.fill = GridBagConstraints.HORIZONTAL;
 		add(terraceButton, gbc_btnT);
 
 		rdfButton = new JButton("Calc RDF");
@@ -475,6 +493,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton_1.gridx = 1;
 		gbc_btnNewButton_1.gridy = 9;
+		gbc_btnNewButton_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton_1.anchor = GridBagConstraints.EAST;
 		add(rdfButton, gbc_btnNewButton_1);
 
@@ -485,20 +504,21 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Chart
 		 */
-		JLabel chartTitle = new JLabel("Pair Potential u(r)");
+		JLabel chartTitle = new JLabel("<html><p style=\"white-space:nowrap\">Pair Potential, \u03c6(r)</p></html>");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
 		gbc_lblNewLabel_7.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_7.insets = new Insets(0, 2, 5, 5);
 		gbc_lblNewLabel_7.gridx = 0;
 		gbc_lblNewLabel_7.gridy = 10;
+		gbc_lblNewLabel_7.gridwidth = 3;
 		add(chartTitle, gbc_lblNewLabel_7);
 		ArrayList<double[][]> RYVals = new ArrayList<>();
 		double[][] disc = { dat.r, dat.disc_v };
-		double[][] cont = { dat.r, dat.cont_v };
+		double[][] cont = { new double[]{1., 2.}, new double[]{0., 0.} };
 		RYVals.add(cont);
 		RYVals.add(disc);
 
-		chartFrame = new EmbeddedChart("Pair Potential, u(r)", names, RYVals,
+		chartFrame = new EmbeddedChart("Pair Potential,  \u03b2\u03c6(r)", names, RYVals,
 				false);
 		chartConstraint = new GridBagConstraints();
 		chartConstraint.weighty = 1.0;
@@ -522,14 +542,15 @@ public class SystemTab extends JPanel implements Serializable,
 			double[] disc_r = new double[dat.disc_v.length * 2 - 1];
 			int ii;
 			for (ii = 0; ii < disc_arr.length; ii++) {
-				disc_arr[ii] = dat.disc_v[(ii + 1) / 2];
+				disc_arr[ii] = dat.disc_v[(ii+1) / 2];
 				disc_r[ii] = dat.r[ii / 2];
 			}
 			double[][] disc = { disc_r, disc_arr };
 			double[][] cont = { dat.r, dat.cont_v };
-			RYVals.add(cont);
 			RYVals.add(disc);
-			chartFrame = new EmbeddedChart("Pair Potential, u(r)", names,
+			RYVals.add(cont);
+			names[0] = "Terraced (M = " + dat.lambda.length+")"; 
+			chartFrame = new EmbeddedChart("Pair Potential, \u03c6(r)", names,
 					RYVals, false);
 			me.add(chartFrame.getContentPane(), chartConstraint);
 			parent.somethingChanged();
@@ -539,9 +560,9 @@ public class SystemTab extends JPanel implements Serializable,
 			double[] disc_arr = {};
 			double[][] disc = { disc_r, disc_arr };
 			double[][] cont = { dat.r, dat.cont_v };
-			RYVals.add(cont);
 			RYVals.add(disc);
-			chartFrame = new EmbeddedChart("Pair Potential, u(r)", names,
+			RYVals.add(cont);
+			chartFrame = new EmbeddedChart("Pair Potential, \u03c6(r)", names,
 					RYVals, false);
 			me.add(chartFrame.getContentPane(), chartConstraint);
 			parent.somethingChanged();
@@ -713,7 +734,7 @@ public class SystemTab extends JPanel implements Serializable,
 					if (n <= 0.0) {
 						JOptionPane.showMessageDialog(getRootPane(),
 								positiveWarning);
-						numRField.setText("" + temperature);
+						temp_field.setText("" + temperature);
 						return;
 					}
 				} catch (Exception e) {
@@ -854,7 +875,7 @@ public class SystemTab extends JPanel implements Serializable,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(getRootPane(),
-						"Temperature (above 0).");
+						"Temperature.");
 				
 			}
 		});
@@ -864,7 +885,7 @@ public class SystemTab extends JPanel implements Serializable,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(getRootPane(),
-						"Packing fraction.");
+						"<html><p>Packing Fraction; <i>&eta</i> = &pi * <i>&sigma</i> <sup>3</sup> * <i>&rho</i> / 6.</p></html>");
 				
 			}
 		});
@@ -874,7 +895,7 @@ public class SystemTab extends JPanel implements Serializable,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(getRootPane(),
-						"Number density.");				
+						"<html><p>Number density; <i>&eta</i> = &pi * <i>&sigma</i> <sup>3</sup> * <i>&rho</i> / 6.</p></html>");				
 			}
 		});
 		
@@ -971,7 +992,7 @@ public class SystemTab extends JPanel implements Serializable,
 						progressBar.setValue(0);
 						new DiscretePotential().discretePotential(dat, numR,
 								deltaR);
-						progressBar.setMaximum(dat.lambda.length);
+						progressBar.setMaximum(100);
 						TlReadParams trp = new TlReadParams(packingFraction,
 								dat.epsilon, dat.lambda, dat.r, dat);
 						trp.addPropertyChangeListener(SystemTab.this);
@@ -991,6 +1012,8 @@ public class SystemTab extends JPanel implements Serializable,
 
 					@Override
 					protected void done() {
+						dat.show[0] = true;
+						dat.show[1] = true;
 						rdfButton.setEnabled(true);
 						SystemTab.this.revalidate();
 						SystemTab.this.repaint();

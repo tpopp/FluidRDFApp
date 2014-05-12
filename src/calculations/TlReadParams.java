@@ -175,7 +175,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 							break;
 					}
 					synchronized (progress) {
-						setProgress(++progress);
+						setProgress((int)((double)(++progress)/lambda.length*100));
 					}
 				}
 
@@ -347,7 +347,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 			g1sw_val = g1sw_val.plus(g1sw_insidesum);
 			n++;
 
-			if (g1sw_insidesum.div(g1sw_val).abs() < 0.000001)
+			if (g1sw_insidesum.div(g1sw_val).abs() < 0.0001)
 				nloop = false;
 		}
 
