@@ -1,5 +1,18 @@
 /**
- * 
+ *  This file is part of FluidInfo.
+
+    FluidInfo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FluidInfo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Applet;
 
@@ -42,9 +55,12 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 	private JScrollPane scrollPane_1;
 	private JScrollPane scroll;
 	private GridBagConstraints gbc_scroll2;
-	private String[] header = { "System", "Internal Energy",
-			"Configurational Energy", "Compressibility",
-			"Isorthermal Compressibility", "Two Body Excess Entropy" };
+	private String[][] header = {
+			{ "<html><p style=\"white-space:nowrap\">Internal Energy, <i>u/\u03B5</i></p></html>" },
+			{ "<html><p style=\"white-space:nowrap\">Configurational Energy, <i>e/\u03B5</i></p></html>" },
+			{ "<html><p style=\"white-space:nowrap\">Compressibility, <i>Z</i></p></html>" },
+			{ "<html><p style=\"white-space:nowrap\">Isothermal Compressibility, <i>\u03C1k</i><sub>B</sub><i>T&chi</i><sub>T</sub></p></html>" },
+			{ "<html><p style=\"white-space:nowrap\">Two Body Excess Entropy, <i>s</i><sup>(2)</sup>/<i>k</i><sub>B</i></p></html>" } };
 	private JButton export;
 
 	/**
@@ -101,8 +117,8 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 
 	public void updateInfo() {
 		mod.refreshTable();
-		DefaultTableModel model = new DefaultTableModel(new Object[0][0],
-				header) {
+		DefaultTableModel model = new DefaultTableModel(header,
+				new String[] { "Properties" }) {
 
 			private static final long serialVersionUID = 4783443266564436271L;
 
@@ -113,15 +129,14 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 
 		};
 		for (Data d : systems.systems) {
-			Object[] arr = new Object[6];
+			Object[] arr = new Object[5];
 			if (d.thermo) {
-				arr[0] = d.name;
-				arr[1] = d.internEnergy;
-				arr[2] = d.configEnergy;
-				arr[3] = d.compress;
-				arr[4] = d.isothermCompress;
-				arr[5] = d.twoBodyEntropy;
-				model.addRow(arr);
+				arr[0] = d.internEnergy;
+				arr[1] = d.configEnergy;
+				arr[2] = d.compress;
+				arr[3] = d.isothermCompress;
+				arr[4] = d.twoBodyEntropy;
+				model.addColumn(d.name, arr);
 			}
 		}
 		information = new JTable(model) {
@@ -140,6 +155,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 					return def;
 			}
 		};
+		information.setRowHeight(information.getRowHeight()*2);
 		information.getTableHeader().setReorderingAllowed(false);
 		remove(scroll);
 		scroll = new JScrollPane(information);
@@ -198,10 +214,10 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 				updateInfo();
 			}
 		};
-		
+
 		mod.addTableModelListener(tml);
-		
-		export.addActionListener(new ActionListener(){
+
+		export.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -219,7 +235,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 						sb.append('\n');
 						for (int jj = 0; jj < j; jj++) {
 							for (int ii = 0; ii < i; ii++) {
-									sb.append(String.format("%6s\t",
+								sb.append(String.format("%6s\t",
 										information.getValueAt(jj, ii)));
 							}
 							sb.append('\n');
@@ -229,9 +245,9 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 						e.printStackTrace();
 					}
 				}
-				
+
 			}
-			
+
 		});
 	}
 

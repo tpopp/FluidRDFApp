@@ -1,6 +1,38 @@
+/**
+ *  This file is part of FluidInfo.
+
+    FluidInfo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FluidInfo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package calculations;
 
+/**
+
+ FluidInfo is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ FluidInfo is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -12,10 +44,11 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 	private double phi, beta;
 	private double[] epsilon, lambda, r_dmd;
 	Data dat;
+	int number;
 
 	public TlReadParams(double phi, double[] epsilon, double[] lambda,
 			double[] r_dmd, Data dat) {
-		
+
 		this.phi = phi;
 		this.epsilon = epsilon;
 		this.lambda = lambda;
@@ -40,6 +73,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 	 */
 	public void tlReadParams(double phi, double[] epsilon, double[] lambda,
 			double[] r_dmd, Data dat) throws IOException {
+		number = 0;
 
 		double rho = phi * 6.0 / Math.PI;
 
@@ -62,6 +96,7 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 		}
 		dat.gofr = gofr;
 		dat.rough_gofr = gofr;
+		System.out.println("Number of times:  " + number);
 	}
 
 	/**
@@ -85,108 +120,117 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 			Data dat) {
 		progress = 0;
 		setProgress(0);
-		
+
 		beta = 1 / dat.temp;
 
-		final tanglu_constants tlc = new tanglu_constants();
-
+		// final tanglu_constants tlc = new tanglu_constants();
+		//
 		final double[] depsilon = new double[epsilon.length];
-
+		//
 		depsilon[epsilon.length - 1] = epsilon[epsilon.length - 1];
-
+		//
 		// find delta epsilon
 		for (int i = 0; i < epsilon.length - 1; i++)
 			depsilon[i] = epsilon[i] - epsilon[i + 1];
 
 		epsilon = depsilon;
+		//
+		// tlc.rho = rho;
+		// tlc.eta = rho * Math.PI / 6.; // packing fraction
+		// tlc.f = 3. + 3. * tlc.eta - Math.pow(tlc.eta, 2.);
+		// tlc.yplus = Math.pow(1. + (Math.pow((1. + 2. * Math.pow(tlc.eta, 4.)
+		// / Math.pow(tlc.f, 2.)), 0.5)), (1. / 3.));
+		// tlc.yminus = Math
+		// .pow(Math.abs(1. - (Math.pow((1. + 2. * Math.pow(tlc.eta, 4.)
+		// / Math.pow(tlc.f, 2.)), 0.5))), (1. / 3.))
+		// * -1.0;
+		//
+		// tlc.c = new Complex(0, 2. * Math.PI / 3.).exp();
+		//
+		// for (int i = 0; i <= 2; i++) {
+		// tlc.t[i] = tsubi(i, tlc);
+		// }
 
-		tlc.rho = rho;
-		tlc.eta = rho * Math.PI / 6.; // packing fraction
-		tlc.f = 3. + 3. * tlc.eta - Math.pow(tlc.eta, 2.);
-		tlc.yplus = Math.pow(1. + (Math.pow((1. + 2. * Math.pow(tlc.eta, 4.)
-				/ Math.pow(tlc.f, 2.)), 0.5)), (1. / 3.));
-		tlc.yminus = Math
-				.pow(Math.abs(1. - (Math.pow((1. + 2. * Math.pow(tlc.eta, 4.)
-						/ Math.pow(tlc.f, 2.)), 0.5))), (1. / 3.))
-				* -1.0;
-
-		tlc.c = new Complex(0, 2. * Math.PI / 3.).exp();
-
-		for (int i = 0; i <= 2; i++) {
-			tlc.t[i] = tsubi(i, tlc);
-		}
-
-		int threads = (Runtime.getRuntime().availableProcessors() + 1) / 2;
-		ExecutorService e = Executors.newFixedThreadPool(threads);
 		for (int i = 0; i < r.length; i++) {
 			if (r[i] < 1.0)
 				gofr[i] = 0.0;
-			else {
-				final int ii = i;
-				e.execute(new Runnable() {
-
-					public void run() {
-						gofr[ii] = g0gmsa(r[ii], tlc).real();
-					}
-				});
+			else if (r[i] >= 10.0) {
+				gofr[i] = 1.0;
+			} else {
+				gofr[i] = g0gmsa(r[i]);
 			}
 		}
-		try {
-			e.shutdown();
-			e.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
 
-		e = Executors
-				.newFixedThreadPool(threads > lambda.length ? lambda.length
-						: threads);
+		// int threads = (Runtime.getRuntime().availableProcessors() + 1) / 2;
+		// ExecutorService e = Executors.newFixedThreadPool(threads);
+		// for (int i = 0; i < r.length; i++) {
+		// if (r[i] < 1.0)
+		// gofr[i] = 0.0;
+		// else {
+		// final int ii = i;
+		// e.execute(new Runnable() {
+		//
+		// public void run() {
+		// gofr[ii] = g0gmsa(r[ii], tlc).real();
+		// }
+		// });
+		// }
+		// }
+		// try {
+		// e.shutdown();
+		// e.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
+		// } catch (InterruptedException e1) {
+		// e1.printStackTrace();
+		// }
+		//
+		// e = Executors
+		// .newFixedThreadPool(threads > lambda.length ? lambda.length
+		// : threads);
 		for (int ja = 0; ja < lambda.length; ja++) {
-			final tanglu_constants tlcN = new tanglu_constants();
-			tlcN.c = tlc.c;
-			tlcN.eta = tlc.eta;
-			tlcN.f = tlc.f;
-			tlcN.rho = tlc.rho;
-			tlcN.t = tlc.t;
-			tlcN.yminus = tlc.yminus;
-			tlcN.yplus = tlc.yplus;
-			final int j = ja;
-			e.execute(new Runnable() {
+			// final tanglu_constants tlcN = new tanglu_constants();
+			// tlcN.c = tlc.c;
+			// tlcN.eta = tlc.eta;
+			// tlcN.f = tlc.f;
+			// tlcN.rho = tlc.rho;
+			// tlcN.t = tlc.t;
+			// tlcN.yminus = tlc.yminus;
+			// tlcN.yplus = tlc.yplus;
+			// final int j = ja;
+			// e.execute(new Runnable() {
+			//
+			// @Override
+			// public void run() {
+			double t;
+			// for (int i = 0; i <= 2; i++) {
+			// tlcN.a1[i] = a1(i, lambda[j], tlcN);
+			// tlcN.a2[i] = a2(i, lambda[j], tlcN);
+			// tlcN.a3[i] = a3(i, lambda[j], tlcN);
+			//
+			// }
 
-				@Override
-				public void run() {
-					double t;
-					for (int i = 0; i <= 2; i++) {
-						tlcN.a1[i] = a1(i, lambda[j], tlcN);
-						tlcN.a2[i] = a2(i, lambda[j], tlcN);
-						tlcN.a3[i] = a3(i, lambda[j], tlcN);
-
-					}
-
-					for (int i = 0; i < r.length; i++) {
-						if (r[i] < 1.0)
-							continue;
-						t = Math.exp(g1sw(r[i], depsilon[j], lambda[j], tlcN)
-								.real());
-						synchronized (gofr) {
-							gofr[i] *= t;
-						}
-						if (r[i] > 8.0)
-							break;
-					}
-					synchronized (progress) {
-						setProgress((int)((double)(++progress)/lambda.length*100));
-					}
-				}
-
-			});
+			for (int i = 0; i < r.length; i++) {
+				if (r[i] < 1.0)
+					continue;
+				t = Math.exp(g1sw(r[i], depsilon[ja], lambda[ja]));
+				// synchronized (gofr) {
+				gofr[i] *= t;
+				// }
+				if (r[i] >= 10.0)
+					break;
+			}
+			synchronized (progress) {
+				setProgress((int) ((double) (++progress) / lambda.length * 100));
+			}
 		}
-		try {
-			e.shutdown();
-			e.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
+
+		// });
+		// }
+		// try {
+		// e.shutdown();
+		// e.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
+		// } catch (InterruptedException e1) {
+		// e1.printStackTrace();
+		// }
 		return;
 	}
 
@@ -321,39 +365,67 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 	 *            constants
 	 * @return square well RDF calculation
 	 */
-	private Complex g1sw(double r, double epsilon, double lambda,
-			tanglu_constants tlc) {
-		int n = 0;
-		boolean nloop = true;
+	private double g1sw(double r, double epsilon, double lambda) {
+		// int n = 0;
+		// boolean nloop = true;
+		//
+		// Complex g1sw_val, g1sw_insidesum, g1sw_inc;
+		//
+		// g1sw_val = new Complex(0, 0);
+		//
+		// while (nloop) {
+		// g1sw_insidesum = new Complex(0, 0);
+		// for (int i = 0; i <= 2; i++) {
+		// g1sw_inc = ((tlc.a1[i].times(Dfunc(6, n, n + 2, tlc.t[i], r - n
+		// - 1., tlc)).plus(tlc.a2[i].times(Efunc(6, n, n + 2,
+		// tlc.t[i], r - n - 1., tlc)))).times(tlc.t[i].times(
+		// lambda - 1.0).exp())
+		// .minus((tlc.a3[i].times(Dfunc(6, n, n + 2, tlc.t[i], r
+		// - n - lambda, tlc)).plus(tlc.a2[i].times(Efunc(
+		// 6, n, n + 2, tlc.t[i], r - n - lambda, tlc))))))
+		// .times((1. + n) * Math.pow((-12. * tlc.eta), n));
+		// g1sw_insidesum = g1sw_insidesum.plus(g1sw_inc);
+		// }
+		//
+		// g1sw_val = g1sw_val.plus(g1sw_insidesum);
+		// n++;
+		//
+		// if (g1sw_insidesum.div(g1sw_val).abs() < 0.0001)
+		// nloop = false;
+		// }
+		//
+		// g1sw_val = g1sw_val.times(beta * -epsilon * Math.pow(1. - tlc.eta,
+		// 8.)
+		// / r);
+		//
+		//
+		// return g1sw_val.real();
+		int x2 = (int) Math.ceil((dat.packingFraction - 0.0001) * 100);
+		int x1 = x2 - 1;
+		int y2 = (int) Math.ceil((r - 0.0001) * 100);
+		int y1 = y2 - 1;
+		int lam = (int) Math.round(lambda * 100) - 100;
+		double x = dat.packingFraction % 0.01 * 100;
+		x = x < 0.000001 ? 1 : x;
+		double y = r % 0.01 * 100;
+		y = y < 0.000001 ? 1 : y;
 
-		Complex g1sw_val, g1sw_insidesum, g1sw_inc;
-
-		g1sw_val = new Complex(0, 0);
-
-		while (nloop) {
-			g1sw_insidesum = new Complex(0, 0);
-			for (int i = 0; i <= 2; i++) {
-				g1sw_inc = ((tlc.a1[i].times(Dfunc(6, n, n + 2, tlc.t[i], r - n
-						- 1., tlc)).plus(tlc.a2[i].times(Efunc(6, n, n + 2,
-						tlc.t[i], r - n - 1., tlc)))).times(tlc.t[i].times(
-						lambda - 1.0).exp())
-						.minus((tlc.a3[i].times(Dfunc(6, n, n + 2, tlc.t[i], r
-								- n - lambda, tlc)).plus(tlc.a2[i].times(Efunc(
-								6, n, n + 2, tlc.t[i], r - n - lambda, tlc))))))
-						.times((1. + n) * Math.pow((-12. * tlc.eta), n));
-				g1sw_insidesum = g1sw_insidesum.plus(g1sw_inc);
-			}
-
-			g1sw_val = g1sw_val.plus(g1sw_insidesum);
-			n++;
-
-			if (g1sw_insidesum.div(g1sw_val).abs() < 0.0001)
-				nloop = false;
+		if (Math.abs(r - lambda) < 0.0101) {
+			y1++;
+			y2++;
+			y -= 1;
+		} else if (Math.abs(r - lambda) < 0.0101) {
+			y1--;
+			y2--;
+			y += 1;
 		}
 
-		g1sw_val = g1sw_val.times(beta * -epsilon * Math.pow(1. - tlc.eta, 8.) / r);
+		double a = dat.g1[x1][y1][lam];
+		double b = dat.g1[x2][y1][lam];
+		double c = dat.g1[x1][y2][lam];
+		double d = dat.g1[x2][y2][lam];
 
-		return g1sw_val;
+		return interpolate(a, b, c, d, x, y) * beta * -epsilon;
 	}
 
 	/**
@@ -362,40 +434,64 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 	 * 
 	 * @param r
 	 *            radius
-	 * @param tlc
-	 *            constants
 	 * @return complex number representing hard spheres RDF
 	 */
-	private static Complex g0gmsa(double r, tanglu_constants tlc) {
-		int n = 0;
-		boolean nloop = true;
+	private double g0gmsa(double r) {
+		int x2 = (int) Math.ceil((dat.packingFraction - 0.00001) * 100);
+		int x1 = x2 - 1;
+		int y2 = (int) Math.ceil((r - 0.00001) * 100);
+		int y1 = y2 - 1;
 
-		Complex g0gmsa_val, g0gmsa_inc;
+		double a = dat.g0[x1][y1];
+		double b = dat.g0[x2][y1];
+		double c = dat.g0[x1][y2];
+		double d = dat.g0[x2][y2];
 
-		double z0 = 2.
-				* (1. + 2. * tlc.eta)
-				/ (4. - tlc.eta)
-				/ Math.pow(1. - tlc.eta, 2.)
-				* (3. + Math.pow(21. - 15. * tlc.eta + 3. * tlc.eta * tlc.eta,
-						0.5));
+		double x = dat.packingFraction % 0.01 * 100;
+		x = x < 0.000001 ? 1 : x;
+		double y = r % 0.01 * 100;
+		y = y < 0.000001 ? 1 : y;
 
-		g0gmsa_val = new Complex(0, 0);
+		return interpolate(a, b, c, d, x, y);
 
-		// until sufficiently converged
-		while (nloop) {
-			g0gmsa_inc = (Cfunc(1, n + 1, n + 1, r - n - 1, tlc).plus(Dfunc(6,
-					n, n + 2, new Complex(z0, 0), r - n - 1., tlc).times(
-					0.5 * tlc.eta * tlc.eta * (1. - tlc.eta) * (1. + n))))
-					.times(Math.pow((-12. * tlc.eta), n));
-			g0gmsa_val = g0gmsa_val.plus(g0gmsa_inc);
+		/*
+		 * if (dat.g0 != null) { if ((dat.density % 0.01 < 0.0001 || dat.density
+		 * % 0.01 > 0.0099) && (r % 0.01 < 0.0001 || r % 0.01 > 0.0099)) return
+		 * dat.g0[(int) Math.round(dat.density * 100)][(int) Math .round(r *
+		 * 100)]; else { double x1, x2, y1, y2; x1 = dat.g0[(int)
+		 * Math.floor(dat.density) * 100][0]; return interpolate(x1, y1, x2, y2,
+		 * dat.density, r); } } else { int n = 0; boolean nloop = true;
+		 * 
+		 * Complex g0gmsa_val, g0gmsa_inc;
+		 * 
+		 * double z0 = 2. (1. + 2. * tlc.eta) / (4. - tlc.eta) / Math.pow(1. -
+		 * tlc.eta, 2.) (3. + Math.pow(21. - 15. * tlc.eta + 3. * tlc.eta
+		 * tlc.eta, 0.5));
+		 * 
+		 * g0gmsa_val = new Complex(0, 0);
+		 * 
+		 * // until sufficiently converged while (nloop) { g0gmsa_inc =
+		 * (Cfunc(1, n + 1, n + 1, r - n - 1, tlc) .plus(Dfunc(6, n, n + 2, new
+		 * Complex(z0, 0), r - n - 1., tlc).times( 0.5 * tlc.eta * tlc.eta * (1.
+		 * - tlc.eta) (1. + n)))).times(Math.pow( (-12. * tlc.eta), n));
+		 * g0gmsa_val = g0gmsa_val.plus(g0gmsa_inc);
+		 * 
+		 * n++;
+		 * 
+		 * if (g0gmsa_inc.div(g0gmsa_val).abs() < 0.000001) nloop = false; }
+		 * 
+		 * return g0gmsa_val.div(r).real(); }
+		 */
+	}
 
-			n++;
-
-			if (g0gmsa_inc.div(g0gmsa_val).abs() < 0.000001)
-				nloop = false;
-		}
-
-		return g0gmsa_val.div(r);
+	private double interpolate(double a, double b, double c, double d,
+			double x1, double x2) {
+		double b1, b2, b3, b4;
+		b1 = a;
+		b2 = b - a;
+		b3 = c - a;
+		b4 = a - b - c + d;
+		return b1 + b2 * x1 + b3 * x2 + b4 * x1 * x2;
 	}
 
 	/**

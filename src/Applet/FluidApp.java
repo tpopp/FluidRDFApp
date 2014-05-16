@@ -1,5 +1,18 @@
 /**
- * 
+ *  This file is part of FluidInfo.
+
+    FluidInfo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FluidInfo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Applet;
 
@@ -8,14 +21,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import javax.swing.Timer;
 import javax.swing.JApplet;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,6 +40,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.Timer;
 
 import calculations.Data;
 
@@ -54,12 +70,46 @@ public class FluidApp extends JApplet implements Serializable {
 	private JMenuItem loadSys;
 	private JMenuItem storeSys;
 	private ThermodynamicsTab thermo;
+	private float[][] G0 = new float[49][1001];
+	private float[][][] G1 = new float[49][1001][101];
+	
+	
 
 	/** 
 	 * 
 	 */
 	public void init() {
 
+		BufferedReader br0;
+		BufferedReader br1;
+		String num, line;
+		int j, k;
+		for(int i = 1; i <= 48; i++){
+			num = i < 10 ? "0" + i : "" + i;
+			try {
+				br0 = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/tl_g0/tl_g0_phi0."+num+".dat")));
+				br1 = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/tl_g1_lowres/tl_g1_phi0."+num+".dat")));
+				br0.readLine();
+				br1.readLine();
+				br1.readLine();
+				j = 0;
+				while((line = br0.readLine()) != null){
+					G0[i][++j] = Float.parseFloat(line.trim().split("\\s+")[2]);
+				}
+				j = 0;
+				while((line = br1.readLine()) != null){
+					++j;
+					String[] arr = line.trim().split("\\s+");
+					for(k = 1; k <= 100; k++)
+						G1[i][j][k] = Float.parseFloat(arr[k]);
+				}
+			} catch (IOException e) {
+				G0 = null;
+				G1 = null;
+				System.out.println("fail");
+				break;
+			}
+		}
 		final JFileChooser jf = new JFileChooser();
 		// menubar
 		JMenuBar menu = new JMenuBar();
@@ -94,7 +144,9 @@ public class FluidApp extends JApplet implements Serializable {
 		calculations = new JTabbedPane(JTabbedPane.NORTH,
 				JTabbedPane.WRAP_TAB_LAYOUT);
 		dats.systems.add(new Data());
-
+		dats.systems.get(0).g0 = G0;
+		dats.systems.get(0).g1 = G1;
+		
 		// Add initial windows
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
@@ -200,7 +252,10 @@ public class FluidApp extends JApplet implements Serializable {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				dats.systems.add(new Data());
+				Data data = new Data();
+				data.g0 = G0;
+				data.g1 = G1;
+				dats.systems.add(data);
 				systems.add(new SystemTab(i++, FluidApp.this, jf, dats.systems
 						.get(dats.systems.size() - 1)));
 				compare.systemUpdate();

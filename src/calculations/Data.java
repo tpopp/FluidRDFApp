@@ -1,3 +1,19 @@
+/**
+ *  This file is part of FluidInfo.
+
+    FluidInfo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FluidInfo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package calculations;
 
 import java.io.Serializable;
@@ -31,6 +47,8 @@ public class Data implements Serializable  {
 	public double twoBodyEntropy;
 	public double compress;
 	public double density;
-	public boolean thermo = false;
+	public boolean thermo = true;
 	public double temp;
+	public float[][] g0;
+	public float[][][] g1;
 }

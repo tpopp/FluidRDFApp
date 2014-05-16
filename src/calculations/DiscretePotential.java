@@ -1,3 +1,19 @@
+/**
+ *  This file is part of FluidInfo.
+
+    FluidInfo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FluidInfo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package calculations;
 
 import java.util.Arrays;
@@ -34,24 +50,23 @@ public class DiscretePotential {
 		given_r = dat.given_r;
 		given_v = dat.given_v;
 
-		int nsteps = 0; // initial number of steps in discretized potential;
+		int nsteps = 100; // initial number of steps in discretized potential;
 						// will be adjusted if necessary by the program.
 		int maxsteps = 1000; // upper limit for declaring arrays.
 
-		// TODO USER INPUTS
 		int nr = numr;
 		double dr = deltar;
 
 		integrals = new double[given_r.length];
-		double[] epsilon = new double[maxsteps + 1]; // discrete potential
-		double[] lambda = new double[maxsteps + 1]; // discrete distance
+		double[] epsilon = new double[100]; // discrete potential
+		double[] lambda = new double[100]; // discrete distance
 		double[] r = new double[nr]; // radii to plot against
 		double[] v_cont = new double[nr]; // continuous potentials
 		double[] v_disc = new double[nr]; // discrete potentials
 
 		// give initial values
 		// discrete steps will be for radii <= 2
-		for (int i = 0; i <= maxsteps; i++) {
+		for (int i = 0; i < 100; i++) {
 			epsilon[i] = 0.0;
 			lambda[i] = 2.0;
 		}
@@ -75,13 +90,20 @@ public class DiscretePotential {
 		double aa, bb, cc = 0;
 		double eps_a, eps_c;
 		double f_a, f_c;
-
+		double lam;
+		int i;
+		for(i = 0, lam = 1.01; i < 100; i++, lam+=0.01){
+			lambda[i] = lam;
+			epsilon[i] = (Calc_Integral(lam) - Calc_Integral(lam-0.01))
+					/ 0.01;
+		}
+		
 		// Calculate lambda and epsilon values
-		for (int i = maxsteps - 1; i > 0; i--) {
-			aa = 0.5;
-			bb = lambda[i];
-
-			// Zero in on root
+//		for (int i = maxsteps - 1; i > 0; i--) {
+//			aa = 0.5;
+//			bb = lambda[i];
+//
+//			// Zero in on root
 //			for (int j = 0; j < jj_max; j++) {
 //				cc = (aa + bb) / 2.;
 //
@@ -102,48 +124,49 @@ public class DiscretePotential {
 //				}
 //
 //			}
-			
-			double j, eps;
-			for(j = bb - dr/10.0; j > 1.0; j -= dr/10.0){
-				eps = Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) > 0 ? MAX_DEPS/2.0 : -MAX_DEPS/2.0;
-				if(Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) > 0 && Root_Func(j, bb, Math.abs(Calc_Potential(j))-eps) < 0 ||
-						Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) < 0 && Root_Func(j, bb, Math.abs(Calc_Potential(j))-eps) > 0){
-					break;
-				}
-			}
-
-			// store lambda and epsilon values for decided distance
-			lambda[i - 1] = j;
-
-			if (lambda[i - 1] < 1.0)
-				lambda[i - 1] = 1.0;
-
-			epsilon[i] = (Calc_Integral(lambda[i]) - Calc_Integral(lambda[i - 1]))
-					/ (lambda[i] - lambda[i - 1]);
-
-			nsteps++;
-
-			// if lambda is as one, stop
-			if (Math.abs(lambda[i - 1] - 1.0) < 0.00001) {
-				break;
-			}
-		}
-		System.out.println("Nsteps:  " + nsteps);
+//			
+//			double j, eps;
+//			for(j = bb - dr/10.0; j > 1.0; j -= dr/10.0){
+//				eps = Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) > 0 ? MAX_DEPS/2.0 : -MAX_DEPS/2.0;
+//				if(Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) > 0 && Root_Func(j, bb, Math.abs(Calc_Potential(j))-eps) < 0 ||
+//						Math.abs(Calc_Potential(j)) - Math.abs(Calc_Potential(bb)) < 0 && Root_Func(j, bb, Math.abs(Calc_Potential(j))-eps) > 0){
+//					break;
+//				}
+//			}
+//
+//			j = ((int)(j*100))/100.;
+//			// store lambda and epsilon values for decided distance
+//			lambda[i - 1] = j;
+//
+//			if (lambda[i - 1] < 1.0)
+//				lambda[i - 1] = 1.0;
+//
+//			epsilon[i] = (Calc_Integral(lambda[i]) - Calc_Integral(lambda[i - 1]))
+//					/ (lambda[i] - lambda[i - 1]);
+//
+//			nsteps++;
+//
+//			//if lambda is as one, stop
+//			if (Math.abs(lambda[i - 1] - 1.0) < 0.00001) {
+//				break;
+//			}
+//		}
+//		System.out.println("Nsteps:  " + nsteps);
 
 		// reassign lambdas and epsilons to the front of their arrays.
-		for (int i = 0; i < nsteps; i++) {
-			lambda[i] = lambda[maxsteps - nsteps + i];
-			epsilon[i] = epsilon[maxsteps - nsteps + i];
-		}
-
-		// clear remainder of arrays.
-		for (int i = nsteps; i < maxsteps; i++) {
-			lambda[i] = 0.0;
-			epsilon[i] = 0.0;
-		}
+//		for (int i = 0; i < nsteps; i++) {
+//			lambda[i] = lambda[maxsteps - nsteps + i];
+//			epsilon[i] = epsilon[maxsteps - nsteps + i];
+//		}
+//
+//		// clear remainder of arrays.
+//		for (int i = nsteps; i < maxsteps; i++) {
+//			lambda[i] = 0.0;
+//			epsilon[i] = 0.0;
+//		}
 
 		// assign energy values to v_disc.
-		for (int i = 0; i < nr; i++) {
+		for (i = 0; i < nr; i++) {
 			if ((r[i] > 0.0) && (r[i] < 1.0)) {
 				v_disc[i] = 1.0 / 0.0;
 			}
@@ -168,6 +191,7 @@ public class DiscretePotential {
 				v_disc[i] = 0.0;
 			}
 		}
+		System.out.println("Got here");
 
 		// Store data in textual format and store arrays for other calculations
 		String paramsfp = Messages.getString("DiscretePotential.StepTitle");
@@ -175,17 +199,20 @@ public class DiscretePotential {
 				.concat(String.format(
 						Messages.getString("DiscretePotential.StepHeaderFormat"),
 						Messages.getString("DiscretePotential.StepColumnHeader"), Messages.getString("DiscretePotential.LambdaColumnHeader"), Messages.getString("DiscretePotential.EpsilonColumnHeader"), Messages.getString("DiscretePotential.DeltaEpsilonColumnHeader"))); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		for (int i = 0; i < nsteps; i++) {
+		for (i = 0; i < nsteps-1; i++) {
 			paramsfp = paramsfp.concat(String.format(
 					Messages.getString("DiscretePotential.StepValuesFormat"),
 					i, lambda[i], epsilon[i], epsilon[i + 1] - epsilon[i]));
 		}
+		paramsfp = paramsfp.concat(String.format(
+				Messages.getString("DiscretePotential.StepValuesFormat"),
+				i, lambda[i], epsilon[i], epsilon[i]));
 
 		String potfp = String
 				.format(Messages
 						.getString("DiscretePotential.PotentialsHeaderFormat"), Messages.getString("DiscretePotential.RadiusColumnHeader"), Messages.getString("DiscretePotential.ContinuousPotentialColumnHeader"), //$NON-NLS-2$ //$NON-NLS-3$
 						Messages.getString("DiscretePotential.DiscretePotentialColumnHeader"));
-		for (int i = 0; i < nr; i++) {
+		for (i = 0; i < nr; i++) {
 			potfp = potfp.concat(String.format(Messages
 					.getString("DiscretePotential.PotentialValuesFormat"),
 					r[i], v_cont[i], v_disc[i]));
@@ -197,8 +224,8 @@ public class DiscretePotential {
 		dat.printed.put(
 				Messages.getString("DiscretePotential.PotentialsStringKey"),
 				potfp);
-		dat.epsilon = Arrays.copyOf(epsilon, nsteps);
-		dat.lambda = Arrays.copyOf(lambda, nsteps);
+		dat.epsilon = epsilon;
+		dat.lambda = lambda;
 		dat.r = r;
 		System.err.println(Arrays.toString(dat.lambda));
 		System.err.println(Arrays.toString(dat.epsilon));

@@ -1,14 +1,22 @@
+/**
+ *  This file is part of FluidInfo.
+
+    FluidInfo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FluidInfo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package calculations;
 
 import java.io.Serializable;
-
-/**
- * 
- * Thank you:
- * http://svn.apache.org/viewvc/commons/proper/math/trunk/src/main/java
- * /org/apache/commons/math3/complex/Complex.java?revision=1540155&view=markup
- * 
- */
 
 public class Complex  implements Serializable {
 
