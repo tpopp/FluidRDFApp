@@ -1,36 +1,21 @@
 /**
- *  This file is part of FluidInfo.
+ *  This file is part of FluidRDFApp.
 
-    FluidInfo is free software: you can redistribute it and/or modify
+    FluidRDFApp is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    FluidInfo is distributed in the hope that it will be useful,
+    FluidRDFApp is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+    along with FluidRDFApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package calculations;
 
-/**
-
- FluidInfo is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- FluidInfo is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
- */
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
@@ -44,7 +29,6 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 	private double phi, beta;
 	private double[] epsilon, lambda, r_dmd;
 	Data dat;
-	int number;
 
 	public TlReadParams(double phi, double[] epsilon, double[] lambda,
 			double[] r_dmd, Data dat) {
@@ -73,7 +57,6 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 	 */
 	public void tlReadParams(double phi, double[] epsilon, double[] lambda,
 			double[] r_dmd, Data dat) throws IOException {
-		number = 0;
 
 		double rho = phi * 6.0 / Math.PI;
 
@@ -96,7 +79,6 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 		}
 		dat.gofr = gofr;
 		dat.rough_gofr = gofr;
-		System.out.println("Number of times:  " + number);
 	}
 
 	/**
@@ -161,8 +143,8 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 			}
 		}
 
-		// int threads = (Runtime.getRuntime().availableProcessors() + 1) / 2;
-		// ExecutorService e = Executors.newFixedThreadPool(threads);
+		int threads = (Runtime.getRuntime().availableProcessors() + 1) / 2;
+		ExecutorService e = Executors.newFixedThreadPool(threads);
 		// for (int i = 0; i < r.length; i++) {
 		// if (r[i] < 1.0)
 		// gofr[i] = 0.0;
@@ -195,42 +177,43 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 			// tlcN.t = tlc.t;
 			// tlcN.yminus = tlc.yminus;
 			// tlcN.yplus = tlc.yplus;
-			// final int j = ja;
-			// e.execute(new Runnable() {
-			//
-			// @Override
-			// public void run() {
-			double t;
-			// for (int i = 0; i <= 2; i++) {
-			// tlcN.a1[i] = a1(i, lambda[j], tlcN);
-			// tlcN.a2[i] = a2(i, lambda[j], tlcN);
-			// tlcN.a3[i] = a3(i, lambda[j], tlcN);
-			//
-			// }
+			final int j = ja;
+			e.execute(new Runnable() {
+				//
+				@Override
+				public void run() {
+					double t;
+					// for (int i = 0; i <= 2; i++) {
+					// tlcN.a1[i] = a1(i, lambda[j], tlcN);
+					// tlcN.a2[i] = a2(i, lambda[j], tlcN);
+					// tlcN.a3[i] = a3(i, lambda[j], tlcN);
+					//
+					// }
 
-			for (int i = 0; i < r.length; i++) {
-				if (r[i] < 1.0)
-					continue;
-				t = Math.exp(g1sw(r[i], depsilon[ja], lambda[ja]));
-				// synchronized (gofr) {
-				gofr[i] *= t;
-				// }
-				if (r[i] >= 10.0)
-					break;
-			}
-			synchronized (progress) {
-				setProgress((int) ((double) (++progress) / lambda.length * 100));
-			}
+					for (int i = 0; i < r.length; i++) {
+						if (r[i] < 1.0)
+							continue;
+						t = Math.exp(g1sw(r[i], depsilon[j], lambda[j]));
+						synchronized (gofr) {
+							gofr[i] *= t;
+						}
+						if (r[i] >= 10.0)
+							break;
+					}
+					synchronized (progress) {
+						setProgress((int) ((double) (++progress)
+								/ lambda.length * 100));
+					}
+				}
+
+			});
 		}
-
-		// });
-		// }
-		// try {
-		// e.shutdown();
-		// e.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
-		// } catch (InterruptedException e1) {
-		// e1.printStackTrace();
-		// }
+		try {
+			e.shutdown();
+			e.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		return;
 	}
 
@@ -410,11 +393,11 @@ public class TlReadParams extends SwingWorker<Void, Void> {
 		double y = r % 0.01 * 100;
 		y = y < 0.000001 ? 1 : y;
 
-		if (Math.abs(r - lambda) < 0.0101) {
+		if (r - lambda < 0.0099 && r - lambda > 0) {
 			y1++;
 			y2++;
 			y -= 1;
-		} else if (Math.abs(r - lambda) < 0.0101) {
+		} else if (r - lambda > -0.0099 && r - lambda < 0) {
 			y1--;
 			y2--;
 			y += 1;

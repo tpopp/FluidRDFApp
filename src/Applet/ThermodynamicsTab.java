@@ -1,18 +1,18 @@
 /**
- *  This file is part of FluidInfo.
+ *  This file is part of FluidRDFApp.
 
-    FluidInfo is free software: you can redistribute it and/or modify
+    FluidRDFApp is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    FluidInfo is distributed in the hope that it will be useful,
+    FluidRDFApp is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+    along with FluidRDFApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Applet;
 
@@ -59,7 +59,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 			{ "<html><p style=\"white-space:nowrap\">Internal Energy, <i>u/\u03B5</i></p></html>" },
 			{ "<html><p style=\"white-space:nowrap\">Configurational Energy, <i>e/\u03B5</i></p></html>" },
 			{ "<html><p style=\"white-space:nowrap\">Compressibility, <i>Z</i></p></html>" },
-			{ "<html><p style=\"white-space:nowrap\">Isothermal Compressibility, <i>\u03C1k</i><sub>B</sub><i>T&chi</i><sub>T</sub></p></html>" },
+//			{ "<html><p style=\"white-space:nowrap\">Isothermal Compressibility, <i>\u03C1k</i><sub>B</sub><i>T&chi</i><sub>T</sub></p></html>" },
 			{ "<html><p style=\"white-space:nowrap\">Two Body Excess Entropy, <i>s</i><sup>(2)</sup>/<i>k</i><sub>B</i></p></html>" } };
 	private JButton export;
 
@@ -129,13 +129,13 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 
 		};
 		for (Data d : systems.systems) {
-			Object[] arr = new Object[5];
+			Object[] arr = new Object[4];
 			if (d.thermo) {
 				arr[0] = d.internEnergy;
 				arr[1] = d.configEnergy;
 				arr[2] = d.compress;
-				arr[3] = d.isothermCompress;
-				arr[4] = d.twoBodyEntropy;
+//				arr[3] = d.isothermCompress;
+				arr[3] = d.twoBodyEntropy;
 				model.addColumn(d.name, arr);
 			}
 		}

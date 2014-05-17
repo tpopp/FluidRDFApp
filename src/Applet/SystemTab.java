@@ -1,18 +1,18 @@
 /**
- *  This file is part of FluidInfo.
+ *  This file is part of FluidRDFApp.
 
-    FluidInfo is free software: you can redistribute it and/or modify
+    FluidRDFApp is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    FluidInfo is distributed in the hope that it will be useful,
+    FluidRDFApp is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+    along with FluidRDFApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Applet;
 
@@ -91,7 +91,7 @@ public class SystemTab extends JPanel implements Serializable,
 	private EmbeddedChart chartFrame;
 	private String[] names = new String[] {
 			Messages.getString("SystemTab.terracedLegend"),
-			Messages.getString("SystemTab.ContinuousLegend")};
+			Messages.getString("SystemTab.ContinuousLegend") };
 	private GridBagConstraints chartConstraint;
 	private List<Double> listr = new ArrayList<Double>();
 	private List<Double> listv = new ArrayList<Double>();
@@ -133,8 +133,8 @@ public class SystemTab extends JPanel implements Serializable,
 		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
 		gbl_panel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
 				Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 1.0 };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 		setLayout(gbl_panel);
 
 		/*
@@ -167,7 +167,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_txtSystem.gridwidth = 4;
 		add(txtSystem, gbc_txtSystem);
 		txtSystem.setColumns(10);
-		
+
 		JLabel parameters = new JLabel("System Parameters");
 		GridBagConstraints gbc_paramLabel = new GridBagConstraints();
 		gbc_paramLabel.anchor = GridBagConstraints.WEST;
@@ -176,7 +176,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_paramLabel.gridy = 1;
 		gbc_paramLabel.gridwidth = 2;
 		add(parameters, gbc_paramLabel);
-		
+
 		/*
 		 * End Nickname
 		 */
@@ -227,8 +227,8 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_table_1.fill = GridBagConstraints.BOTH;
 		gbc_table_1.gridx = 3;
 		gbc_table_1.gridy = 2;
-		tableModel.addRow(new Object[] {new Double(1), new Double(0)});
-		tableModel.addRow(new Object[] {new Double(2), new Double(0)});
+		tableModel.addRow(new Object[] { new Double(1), new Double(0) });
+		tableModel.addRow(new Object[] { new Double(2), new Double(0) });
 		listr.add(1.);
 		listr.add(2.);
 		listv.add(0.);
@@ -240,19 +240,20 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * End table
 		 */
-		
+
 		/*
 		 * Temperature
 		 */
-		
-		JLabel lbl_temp = new JLabel("<html><p style=\"white-space:nowrap\">Temperature, <i>k</i><sub>B</sub><i>T/\u03B5</i></p></html>");
+
+		JLabel lbl_temp = new JLabel(
+				"<html><p style=\"white-space:nowrap\">Temperature, <i>k</i><sub>B</sub><i>T/\u03B5</i></p></html>");
 		GridBagConstraints gbc_temp = new GridBagConstraints();
 		gbc_temp.anchor = GridBagConstraints.WEST;
 		gbc_temp.insets = new Insets(0, 2, 5, 5);
 		gbc_temp.gridx = 0;
 		gbc_temp.gridy = 2;
 		add(lbl_temp, gbc_temp);
-		
+
 		tempHint = new JButton("?"); //$NON-NLS-1$
 		GridBagConstraints gbcTemp_button = new GridBagConstraints();
 		gbcTemp_button.insets = new Insets(0, 0, 5, 5);
@@ -260,9 +261,8 @@ public class SystemTab extends JPanel implements Serializable,
 		gbcTemp_button.gridy = 2;
 		add(tempHint, gbcTemp_button);
 
-
 		temp_field = new JTextField();
-		temp_field.setText("" + temperature); 
+		temp_field.setText("" + temperature);
 		GridBagConstraints gbc_tempField = new GridBagConstraints();
 		gbc_tempField.insets = new Insets(0, 0, 5, 5);
 		gbc_tempField.fill = GridBagConstraints.HORIZONTAL;
@@ -270,22 +270,23 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_tempField.gridy = 2;
 		add(temp_field, gbc_tempField);
 		temp_field.setColumns(10);
-		
-		 /*
-		  * End Temperature 
+
+		/*
+		 * End Temperature
 		 */
 
 		/*
 		 * Packing Fraction
 		 */
-		JLabel lblNewLabel_3 = new JLabel("<html><p style=\"white-space:nowrap\">Packing Fraction,  <i>&eta</i></p></html>");
+		JLabel lblNewLabel_3 = new JLabel(
+				"<html><p style=\"white-space:nowrap\">Packing Fraction,  <i>&eta</i></p></html>");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
 		gbc_lblNewLabel_3.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_3.insets = new Insets(0, 2, 5, 5);
 		gbc_lblNewLabel_3.gridx = 0;
 		gbc_lblNewLabel_3.gridy = 3;
 		add(lblNewLabel_3, gbc_lblNewLabel_3);
-		
+
 		packingHint = new JButton("?"); //$NON-NLS-1$
 		GridBagConstraints gbcPacking_button = new GridBagConstraints();
 		gbcPacking_button.insets = new Insets(0, 0, 5, 5);
@@ -294,7 +295,7 @@ public class SystemTab extends JPanel implements Serializable,
 		add(packingHint, gbcPacking_button);
 
 		packingField = new JTextField();
-		packingField.setText("" + packingFraction); 
+		packingField.setText("" + packingFraction);
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -309,14 +310,15 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Number Density
 		 */
-		JLabel lblNumberDensity = new JLabel("<html><p style=\"white-space:nowrap\">Number Density,  <i>&rho&sigma</i><sup>3</sup></p></html>"); //$NON-NLS-1$
+		JLabel lblNumberDensity = new JLabel(
+				"<html><p style=\"white-space:nowrap\">Number Density,  <i>&rho&sigma</i><sup>3</sup></p></html>"); //$NON-NLS-1$
 		GridBagConstraints gbc_lblNumberDensity = new GridBagConstraints();
 		gbc_lblNumberDensity.anchor = GridBagConstraints.WEST;
 		gbc_lblNumberDensity.insets = new Insets(0, 2, 5, 5);
 		gbc_lblNumberDensity.gridx = 0;
 		gbc_lblNumberDensity.gridy = 4;
 		add(lblNumberDensity, gbc_lblNumberDensity);
-		
+
 		densityHint = new JButton("?"); //$NON-NLS-1$
 		GridBagConstraints gbcDensity_button = new GridBagConstraints();
 		gbcDensity_button.insets = new Insets(0, 0, 5, 5);
@@ -340,30 +342,31 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Delta Eps Max
 		 */
-//		JLabel lblDeltaEpsMax = new JLabel("<html><p style=\"white-space:nowrap\">\u0394 <i>&epsilon</i><sup>max</sup></p></html>"); 
-//		GridBagConstraints gbc_lblDeltaEpsMax = new GridBagConstraints();
-//		gbc_lblDeltaEpsMax.anchor = GridBagConstraints.WEST;
-//		gbc_lblDeltaEpsMax.insets = new Insets(0, 2, 5, 5);
-//		gbc_lblDeltaEpsMax.gridx = 0;
-//		gbc_lblDeltaEpsMax.gridy = 5;
-//		add(lblDeltaEpsMax, gbc_lblDeltaEpsMax);
-//
-//		deltaEpsHint = new JButton("?"); //$NON-NLS-1$
-//		GridBagConstraints gbc_button = new GridBagConstraints();
-//		gbc_button.insets = new Insets(0, 0, 5, 5);
-//		gbc_button.gridx = 1;
-//		gbc_button.gridy = 5;
-//		add(deltaEpsHint, gbc_button);
-//
-//		epsMaxField = new JTextField();
-//		epsMaxField.setText("" + epsMax); //$NON-NLS-1$
-//		epsMaxField.setColumns(10);
-//		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-//		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-//		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-//		gbc_textField_2.gridx = 2;
-//		gbc_textField_2.gridy = 5;
-//		add(epsMaxField, gbc_textField_2);
+		// JLabel lblDeltaEpsMax = new
+		// JLabel("<html><p style=\"white-space:nowrap\">\u0394 <i>&epsilon</i><sup>max</sup></p></html>");
+		// GridBagConstraints gbc_lblDeltaEpsMax = new GridBagConstraints();
+		// gbc_lblDeltaEpsMax.anchor = GridBagConstraints.WEST;
+		// gbc_lblDeltaEpsMax.insets = new Insets(0, 2, 5, 5);
+		// gbc_lblDeltaEpsMax.gridx = 0;
+		// gbc_lblDeltaEpsMax.gridy = 5;
+		// add(lblDeltaEpsMax, gbc_lblDeltaEpsMax);
+		//
+		//		deltaEpsHint = new JButton("?"); //$NON-NLS-1$
+		// GridBagConstraints gbc_button = new GridBagConstraints();
+		// gbc_button.insets = new Insets(0, 0, 5, 5);
+		// gbc_button.gridx = 1;
+		// gbc_button.gridy = 5;
+		// add(deltaEpsHint, gbc_button);
+		//
+		// epsMaxField = new JTextField();
+		//		epsMaxField.setText("" + epsMax); //$NON-NLS-1$
+		// epsMaxField.setColumns(10);
+		// GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		// gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		// gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		// gbc_textField_2.gridx = 2;
+		// gbc_textField_2.gridy = 5;
+		// add(epsMaxField, gbc_textField_2);
 		/*
 		 * End Delta Eps max
 		 */
@@ -371,30 +374,30 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Number of r points
 		 */
-//		JLabel lblNewLabel_5 = new JLabel("<html><i>n</i><sub>r</sub></html>"); //$NON-NLS-1$
-//		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
-//		gbc_lblNewLabel_5.anchor = GridBagConstraints.WEST;
-//		gbc_lblNewLabel_5.insets = new Insets(0, 2, 5, 5);
-//		gbc_lblNewLabel_5.gridx = 0;
-//		gbc_lblNewLabel_5.gridy = 7;
-//		add(lblNewLabel_5, gbc_lblNewLabel_5);
-//
-//		numRHint = new JButton("?"); //$NON-NLS-1$
-//		GridBagConstraints gbc_button_2 = new GridBagConstraints();
-//		gbc_button_2.insets = new Insets(0, 0, 5, 5);
-//		gbc_button_2.gridx = 1;
-//		gbc_button_2.gridy = 7;
-//		add(numRHint, gbc_button_2);
-//
-//		numRField = new JTextField();
-//		numRField.setText("" + numR); //$NON-NLS-1$
-//		numRField.setColumns(10);
-//		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
-//		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
-//		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
-//		gbc_textField_4.gridx = 2;
-//		gbc_textField_4.gridy = 7;
-//		add(numRField, gbc_textField_4);
+		//		JLabel lblNewLabel_5 = new JLabel("<html><i>n</i><sub>r</sub></html>"); //$NON-NLS-1$
+		// GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
+		// gbc_lblNewLabel_5.anchor = GridBagConstraints.WEST;
+		// gbc_lblNewLabel_5.insets = new Insets(0, 2, 5, 5);
+		// gbc_lblNewLabel_5.gridx = 0;
+		// gbc_lblNewLabel_5.gridy = 7;
+		// add(lblNewLabel_5, gbc_lblNewLabel_5);
+		//
+		//		numRHint = new JButton("?"); //$NON-NLS-1$
+		// GridBagConstraints gbc_button_2 = new GridBagConstraints();
+		// gbc_button_2.insets = new Insets(0, 0, 5, 5);
+		// gbc_button_2.gridx = 1;
+		// gbc_button_2.gridy = 7;
+		// add(numRHint, gbc_button_2);
+		//
+		// numRField = new JTextField();
+		//		numRField.setText("" + numR); //$NON-NLS-1$
+		// numRField.setColumns(10);
+		// GridBagConstraints gbc_textField_4 = new GridBagConstraints();
+		// gbc_textField_4.insets = new Insets(0, 0, 5, 5);
+		// gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
+		// gbc_textField_4.gridx = 2;
+		// gbc_textField_4.gridy = 7;
+		// add(numRField, gbc_textField_4);
 		/*
 		 * End number of r points
 		 */
@@ -402,30 +405,30 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Delta r
 		 */
-//		JLabel lblDeltaR = new JLabel("<html><p style=\"white-space:nowrap\">\u0394 <i>r</i> </p></html>"); //$NON-NLS-1$
-//		GridBagConstraints gbc_lblDeltaR = new GridBagConstraints();
-//		gbc_lblDeltaR.anchor = GridBagConstraints.WEST;
-//		gbc_lblDeltaR.insets = new Insets(0, 2, 5, 5);
-//		gbc_lblDeltaR.gridx = 0;
-//		gbc_lblDeltaR.gridy = 8;
-//		add(lblDeltaR, gbc_lblDeltaR);
-//
-//		deltaRHint = new JButton("?"); //$NON-NLS-1$
-//		GridBagConstraints gbc_button_3 = new GridBagConstraints();
-//		gbc_button_3.insets = new Insets(0, 0, 5, 5);
-//		gbc_button_3.gridx = 1;
-//		gbc_button_3.gridy = 8;
-//		add(deltaRHint, gbc_button_3);
-//
-//		deltaRField = new JTextField();
-//		deltaRField.setText("" + deltaR); //$NON-NLS-1$
-//		deltaRField.setColumns(10);
-//		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-//		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
-//		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
-//		gbc_textField_5.gridx = 2;
-//		gbc_textField_5.gridy = 8;
-//		add(deltaRField, gbc_textField_5);
+		//		JLabel lblDeltaR = new JLabel("<html><p style=\"white-space:nowrap\">\u0394 <i>r</i> </p></html>"); //$NON-NLS-1$
+		// GridBagConstraints gbc_lblDeltaR = new GridBagConstraints();
+		// gbc_lblDeltaR.anchor = GridBagConstraints.WEST;
+		// gbc_lblDeltaR.insets = new Insets(0, 2, 5, 5);
+		// gbc_lblDeltaR.gridx = 0;
+		// gbc_lblDeltaR.gridy = 8;
+		// add(lblDeltaR, gbc_lblDeltaR);
+		//
+		//		deltaRHint = new JButton("?"); //$NON-NLS-1$
+		// GridBagConstraints gbc_button_3 = new GridBagConstraints();
+		// gbc_button_3.insets = new Insets(0, 0, 5, 5);
+		// gbc_button_3.gridx = 1;
+		// gbc_button_3.gridy = 8;
+		// add(deltaRHint, gbc_button_3);
+		//
+		// deltaRField = new JTextField();
+		//		deltaRField.setText("" + deltaR); //$NON-NLS-1$
+		// deltaRField.setColumns(10);
+		// GridBagConstraints gbc_textField_5 = new GridBagConstraints();
+		// gbc_textField_5.insets = new Insets(0, 0, 5, 5);
+		// gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
+		// gbc_textField_5.gridx = 2;
+		// gbc_textField_5.gridy = 8;
+		// add(deltaRField, gbc_textField_5);
 		/*
 		 * End delta r
 		 */
@@ -433,7 +436,8 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * R max
 		 */
-		JLabel lblNewLabel_6 = new JLabel("<html><p style=\"white-space:nowrap\"><i>r</i><sup>max</sup>/&sigma</p></html>"); //$NON-NLS-1$
+		JLabel lblNewLabel_6 = new JLabel(
+				"<html><p style=\"white-space:nowrap\"><i>r</i><sup>max</sup>/&sigma</p></html>"); //$NON-NLS-1$
 		GridBagConstraints gbc_lblNewLabel_6 = new GridBagConstraints();
 		gbc_lblNewLabel_6.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_6.insets = new Insets(0, 2, 5, 5);
@@ -491,7 +495,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_btnNW.anchor = GridBagConstraints.EAST;
 		add(newWindowButton, gbc_btnNW);
 
-		terraceButton = new JButton("Terrace \u03c6(r)/\u03B5");
+		terraceButton = new JButton("<html>Terrace <i>\u03D5</i>(r)<html>");
 		GridBagConstraints gbc_btnT = new GridBagConstraints();
 		gbc_btnT.insets = new Insets(0, 0, 5, 5);
 		gbc_btnT.gridx = 0;
@@ -517,7 +521,8 @@ public class SystemTab extends JPanel implements Serializable,
 		/*
 		 * Chart
 		 */
-		JLabel chartTitle = new JLabel("<html><p style=\"white-space:nowrap\">Pair Potential, \u03c6(r)/\u03B5</p></html>");
+		JLabel chartTitle = new JLabel(
+				"<html><p style=\"white-space:nowrap\">Pair Potential, \u03c6(r)/<i>\u03B5</i></p></html>");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
 		gbc_lblNewLabel_7.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_7.insets = new Insets(0, 2, 5, 5);
@@ -527,12 +532,12 @@ public class SystemTab extends JPanel implements Serializable,
 		add(chartTitle, gbc_lblNewLabel_7);
 		ArrayList<double[][]> RYVals = new ArrayList<>();
 		double[][] disc = { dat.r, dat.disc_v };
-		double[][] cont = { new double[]{1., 2.}, new double[]{0., 0.} };
+		double[][] cont = { new double[] { 1., 2. }, new double[] { 0., 0. } };
 		RYVals.add(cont);
 		RYVals.add(disc);
 
-		chartFrame = new EmbeddedChart("Pair Potential,  \u03c6(r)/\u03B5", names, RYVals,
-				false);
+		chartFrame = new EmbeddedChart("Pair Potential,  \u03c6(r)/\u03B5",
+				names, RYVals, false, parent);
 		chartConstraint = new GridBagConstraints();
 		chartConstraint.weighty = 1.0;
 		chartConstraint.gridwidth = 6;
@@ -555,15 +560,15 @@ public class SystemTab extends JPanel implements Serializable,
 			double[] disc_r = new double[dat.disc_v.length * 2 - 1];
 			int ii;
 			for (ii = 0; ii < disc_arr.length; ii++) {
-				disc_arr[ii] = dat.disc_v[(ii+1) / 2];
+				disc_arr[ii] = dat.disc_v[(ii + 1) / 2];
 				disc_r[ii] = dat.r[ii / 2];
 			}
 			double[][] disc = { disc_r, disc_arr };
 			double[][] cont = { dat.r, dat.cont_v };
 			RYVals.add(disc);
 			RYVals.add(cont);
-			chartFrame = new EmbeddedChart("Pair Potential, \u03c6(r)/\u03B5", names,
-					RYVals, false);
+			chartFrame = new EmbeddedChart("Pair Potential, \u03c6(r)/\u03B5",
+					names, RYVals, false, parent);
 			me.add(chartFrame.getContentPane(), chartConstraint);
 			parent.somethingChanged();
 		} catch (Exception E) {
@@ -574,8 +579,8 @@ public class SystemTab extends JPanel implements Serializable,
 			double[][] cont = { dat.r, dat.cont_v };
 			RYVals.add(disc);
 			RYVals.add(cont);
-			chartFrame = new EmbeddedChart("Pair Potential, \u03c6(r)/\u03B5", names,
-					RYVals, false);
+			chartFrame = new EmbeddedChart("Pair Potential, \u03c6(r)/\u03B5",
+					names, RYVals, false, parent);
 			me.add(chartFrame.getContentPane(), chartConstraint);
 			parent.somethingChanged();
 		}
@@ -667,20 +672,24 @@ public class SystemTab extends JPanel implements Serializable,
 						packingField.setText("" + packingFraction);
 						return;
 					}
-					if (n >= 0.74) {
-						JOptionPane.showMessageDialog(getRootPane(),
-								"Packing fraction should be less than 0.74");
+					if (n > 0.64) {
+						JOptionPane
+								.showMessageDialog(
+										getRootPane(),
+										"<html>Please specify a packing fraction (or density) below the random close packing limit, &eta = 0.64 (&rho&sigma<sup>3</sup> = 1.2223).</html>");
 						packingField.setText("" + packingFraction);
 						return;
 					}
 				} catch (Exception e) {
-
+					JOptionPane.showMessageDialog(getRootPane(),
+							"Please enter a valid number.");
+					packingField.setText("" + packingFraction);
+					return;
 				}
 				packingFraction = n;
 				numberDensity = n * 6.0 / Math.PI;
 				dat.density = numberDensity;
 				numDensityField.setText(String.format("%.4f", numberDensity));
-
 			}
 
 			@Override
@@ -700,14 +709,19 @@ public class SystemTab extends JPanel implements Serializable,
 						numDensityField.setText("" + numberDensity);
 						return;
 					}
-					if (n >= 1.413) {
-						JOptionPane.showMessageDialog(getRootPane(),
-								"Number density should be less than 1.413");
-						numDensityField.setText("" + packingFraction);
+					if (n >= 1.2223) {
+						JOptionPane
+								.showMessageDialog(
+										getRootPane(),
+										"<html>Please specify a packing fraction (or density) below the random close packing limit, &eta = 0.64 (&rho&sigma<sup>3</sup> = 1.2223).</html>");
+						numDensityField.setText("" + numberDensity);
 						return;
 					}
 				} catch (Exception e) {
-
+					JOptionPane.showMessageDialog(getRootPane(),
+							"Please enter a valid number.");
+					numDensityField.setText("" + numberDensity);
+					return;
 				}
 				numberDensity = n;
 				packingFraction = n / 6.0 * Math.PI;
@@ -718,26 +732,26 @@ public class SystemTab extends JPanel implements Serializable,
 			public void focusGained(FocusEvent arg0) {
 			}
 		});
-//		deltaEpsHint.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				JOptionPane.showMessageDialog(getRootPane(),
-//						Messages.getString("SystemTab.deltaEpsHint"));
-//
-//			}
-//		});
-//		numRHint.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				JOptionPane.showMessageDialog(getRootPane(),
-//						Messages.getString("SystemTab.numRHint"));
-//
-//			}
-//		});
+		// deltaEpsHint.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// JOptionPane.showMessageDialog(getRootPane(),
+		// Messages.getString("SystemTab.deltaEpsHint"));
+		//
+		// }
+		// });
+		// numRHint.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// JOptionPane.showMessageDialog(getRootPane(),
+		// Messages.getString("SystemTab.numRHint"));
+		//
+		// }
+		// });
 		temp_field.addFocusListener(new FocusListener() {
-			
+
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				double n = 0;
@@ -750,78 +764,81 @@ public class SystemTab extends JPanel implements Serializable,
 						return;
 					}
 				} catch (Exception e) {
-
+					JOptionPane.showMessageDialog(getRootPane(),
+							"Please enter a valid number.");
+					temp_field.setText("" + temperature);
+					return;
 				}
 				temperature = n;
 				dat.temp = temperature;
 			}
-			
+
 			@Override
 			public void focusGained(FocusEvent arg0) {
 			}
 		});
-//		numRField.addFocusListener(new FocusListener() {
-//
-//			@Override
-//			public void focusLost(FocusEvent arg0) {
-//				int n = 0;
-//				try {
-//					n = Integer.parseInt(numRField.getText());
-//					if (n <= 0) {
-//						JOptionPane.showMessageDialog(getRootPane(),
-//								positiveWarning);
-//						numRField.setText("" + numR);
-//						return;
-//					}
-//				} catch (Exception e) {
-//
-//				}
-//				numR = n;
-//				deltaR = maxR / numR;
-//				deltaRField.setText(String.format("%.4f", deltaR));
-//
-//			}
-//
-//			@Override
-//			public void focusGained(FocusEvent arg0) {
-//			}
-//		});
-//		deltaRHint.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				JOptionPane.showMessageDialog(getRootPane(),
-//						Messages.getString("SystemTab.deltaRHint"));
-//
-//			}
-//		});
-//		deltaRField.addFocusListener(new FocusListener() {
-//
-//			@Override
-//			public void focusLost(FocusEvent arg0) {
-//				double n = 0;
-//				try {
-//					n = Double.parseDouble(deltaRField.getText());
-//					if (n <= 0) {
-//						JOptionPane.showMessageDialog(getRootPane(),
-//								positiveWarning);
-//						deltaRField.setText("" + deltaR);
-//						return;
-//					}
-//				} catch (Exception e) {
-//
-//				}
-//				deltaR = n;
-//				numR = (int) (maxR / n);
-//				numRField.setText(String.format("%d", numR));
-//				deltaR = maxR / numR;
-//				deltaRField.setText(String.format("%.4f", deltaR));
-//			}
-//
-//			@Override
-//			public void focusGained(FocusEvent arg0) {
-//			}
-//		});
+		// numRField.addFocusListener(new FocusListener() {
+		//
+		// @Override
+		// public void focusLost(FocusEvent arg0) {
+		// int n = 0;
+		// try {
+		// n = Integer.parseInt(numRField.getText());
+		// if (n <= 0) {
+		// JOptionPane.showMessageDialog(getRootPane(),
+		// positiveWarning);
+		// numRField.setText("" + numR);
+		// return;
+		// }
+		// } catch (Exception e) {
+		//
+		// }
+		// numR = n;
+		// deltaR = maxR / numR;
+		// deltaRField.setText(String.format("%.4f", deltaR));
+		//
+		// }
+		//
+		// @Override
+		// public void focusGained(FocusEvent arg0) {
+		// }
+		// });
+		// deltaRHint.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// JOptionPane.showMessageDialog(getRootPane(),
+		// Messages.getString("SystemTab.deltaRHint"));
+		//
+		// }
+		// });
+		// deltaRField.addFocusListener(new FocusListener() {
+		//
+		// @Override
+		// public void focusLost(FocusEvent arg0) {
+		// double n = 0;
+		// try {
+		// n = Double.parseDouble(deltaRField.getText());
+		// if (n <= 0) {
+		// JOptionPane.showMessageDialog(getRootPane(),
+		// positiveWarning);
+		// deltaRField.setText("" + deltaR);
+		// return;
+		// }
+		// } catch (Exception e) {
+		//
+		// }
+		// deltaR = n;
+		// numR = (int) (maxR / n);
+		// numRField.setText(String.format("%d", numR));
+		// deltaR = maxR / numR;
+		// deltaRField.setText(String.format("%.4f", deltaR));
+		// }
+		//
+		// @Override
+		// public void focusGained(FocusEvent arg0) {
+		// }
+		// });
 		rMaxHint.addActionListener(new ActionListener() {
 
 			@Override
@@ -845,7 +862,10 @@ public class SystemTab extends JPanel implements Serializable,
 						return;
 					}
 				} catch (Exception e) {
-
+					JOptionPane.showMessageDialog(getRootPane(),
+							"Please enter a valid number.");
+					rMaxField.setText("" + maxR);
+					return;
 				}
 				maxR = n;
 				numR = (int) Math.ceil(maxR / deltaR);
@@ -881,36 +901,42 @@ public class SystemTab extends JPanel implements Serializable,
 				new DiscreteThread().execute();
 			}
 		});
-		
+
 		tempHint.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(getRootPane(),
-						"Temperature.");
-				
+				JOptionPane
+						.showMessageDialog(
+								getRootPane(),
+								"<html><p style=\"white-space:nowrap\">Dimensionless temperature; <i>k</i><sub>B</sub> is Boltzmann's constant and <i>&epsilon</i> is a characteristic energy scale. Predictions may be unreliable for temperatures below ~0.05.</p></html>");
+
 			}
 		});
-		
+
 		packingHint.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(getRootPane(),
-						"<html><p>Packing Fraction; <i>&eta</i> = &pi * <i>&sigma</i> <sup>3</sup> * <i>&rho</i> / 6.</p></html>");
-				
+				JOptionPane
+						.showMessageDialog(
+								getRootPane(),
+								"<html><p>Packing fraction <i>&eta</i> = <i>&rho</i>&pi<i>&sigma</i><sup>3</sup>/6; <i>&rho</i> is number density and <i>&sigma</i> is the diameter of the hard core. Predictions may be unreliable for packing fractions above ~0.50.</p></html>");
+
 			}
 		});
-		
+
 		densityHint.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(getRootPane(),
-						"<html><p>Number density; <i>&eta</i> = &pi * <i>&sigma</i> <sup>3</sup> * <i>&rho</i> / 6.</p></html>");				
+				JOptionPane
+						.showMessageDialog(
+								getRootPane(),
+								"<html><p>Dimensionless number density; <i>&rho</i> is number density and <i>&sigma</i> is the diameter of the hard core. Predictions may be unreliable for densities above ~1.0.</p></html>");
 			}
 		});
-		
+
 		rdfButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1090,31 +1116,29 @@ public class SystemTab extends JPanel implements Serializable,
 							potentialsTable.revalidate();
 							potentialsTable.repaint();
 							tableUpdate();
-							System.out.println("Lambdas:  "
-									+ Arrays.toString(dat.lambda));
 						}
 					};
 					sw.execute();
 				}
 			}
 		});
-//		epsMaxField.addFocusListener(new FocusListener() {
-//
-//			@Override
-//			public void focusLost(FocusEvent e) {
-//				dat.max_deps = Double.parseDouble(epsMaxField.getText());
-//				if (dat.max_deps < 0) {
-//					JOptionPane.showMessageDialog(getRootPane(),
-//							positiveWarning);
-//					epsMaxField.setText("" + epsMax); //$NON-NLS-1$
-//					dat.max_deps = epsMax;
-//				}
-//			}
-//
-//			@Override
-//			public void focusGained(FocusEvent e) {
-//			}
-//		});
+		// epsMaxField.addFocusListener(new FocusListener() {
+		//
+		// @Override
+		// public void focusLost(FocusEvent e) {
+		// dat.max_deps = Double.parseDouble(epsMaxField.getText());
+		// if (dat.max_deps < 0) {
+		// JOptionPane.showMessageDialog(getRootPane(),
+		// positiveWarning);
+		//					epsMaxField.setText("" + epsMax); //$NON-NLS-1$
+		// dat.max_deps = epsMax;
+		// }
+		// }
+		//
+		// @Override
+		// public void focusGained(FocusEvent e) {
+		// }
+		// });
 	}
 
 	class SerialListener implements TableModelListener, Serializable {
@@ -1137,21 +1161,32 @@ public class SystemTab extends JPanel implements Serializable,
 			} else if ((tableModel.getValueAt(n, 0)) == null
 					|| (tableModel.getValueAt(n, 1)) == null) {
 			} else {
-				if (n != listr.size()) {
+				if (n != listr.size() && n != listv.size()) {
 					listr.remove(n);
 					listv.remove(n);
 				}
-				try {
-					listr.add(n, Double.parseDouble("" //$NON-NLS-1$
-							+ tableModel.getValueAt(n, 0)));
-				} catch (Exception E) {
-					listr.add(n, 0.0);
+				try{
+					Double.parseDouble("" 
+							+ tableModel.getValueAt(n, 0));
+					Double.parseDouble("" 
+							+ tableModel.getValueAt(n, 1));
+				}catch(Exception E){
+					JOptionPane.showMessageDialog(getRootPane(),
+							"Please enter a valid number.");
+					return;
 				}
 				try {
-					listv.add(n, Double.parseDouble("" //$NON-NLS-1$
-							+ tableModel.getValueAt(n, 1)));
+					double d = Double.parseDouble("" 
+							+ tableModel.getValueAt(n, 0));
+					listr.add(n, d);
 				} catch (Exception E) {
-					listv.add(n, 0.0);
+					
+				}
+				try {
+					double d = Double.parseDouble("" 
+							+ tableModel.getValueAt(n, 1));
+					listv.add(n, d);
+				} catch (Exception E) {
 				}
 			}
 			n = tableModel.getRowCount() - 1;
@@ -1174,8 +1209,9 @@ public class SystemTab extends JPanel implements Serializable,
 					double[][] cont = { dat.given_r, dat.given_v };
 					String[] name = { "Smooth" };
 					RYVals.add(cont);
-					chartFrame = new EmbeddedChart("Pair Potential, \u03c6(r) / \u03B5",
-							name, RYVals, false);
+					chartFrame = new EmbeddedChart(
+							"Pair Potential, \u03c6(r) / \u03B5", name, RYVals,
+							false, parent);
 					return null;
 				}
 

@@ -1,18 +1,18 @@
 /**
- *  This file is part of FluidInfo.
+ *  This file is part of FluidRDFApp.
 
-    FluidInfo is free software: you can redistribute it and/or modify
+    FluidRDFApp is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    FluidInfo is distributed in the hope that it will be useful,
+    FluidRDFApp is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+    along with FluidRDFApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Applet;
 
@@ -67,6 +67,8 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 	String[] legends;
 	List<double[][]> yvals;
 	boolean gofr;
+	double x1 = 0, x2 = 2.5, y1 = -1, y2 = 3;
+	FluidApp over;
 
 	/**
 	 * Creates a new demo.
@@ -75,20 +77,11 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 	 *            the frame title.
 	 */
 	public EmbeddedChart(final String title, String[] legends,
-			List<double[][]> yVals, boolean gofr) {
+			List<double[][]> yVals, boolean gofr, FluidApp over) {
 
 		super();
 		this.title = title;
-		this.legends = legends;
-		this.yvals = yVals;
-		this.gofr = gofr;
-
-		GridBagLayout gbl = new GridBagLayout();
-		gbl.columnWidths = new int[] { 10, 0, 0 };
-		gbl.rowHeights = new int[] { 0, 0, 0 };
-		gbl.columnWeights = new double[] { 0.0, 1.0, 1.0 };
-		gbl.rowWeights = new double[] { 1.0, 1.0, 0.0 };
-		setLayout(gbl);
+		this.over = over;
 
 		updateInfo(legends, yVals, gofr);
 	}
@@ -97,9 +90,20 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		chartPanel.restoreAutoBounds();
 	}
 
-	public void updateInfo(String[] legends, List<double[][]> yVals,
-			boolean gofr) {
+	public synchronized void updateInfo(String[] legends,
+			List<double[][]> yVals, boolean gofr) {
 		removeAll();
+		GridBagLayout gbl = new GridBagLayout();
+		gbl.columnWidths = new int[] { 10, 0, 0 };
+		gbl.rowHeights = new int[] { 0, 0, 0 };
+		gbl.columnWeights = new double[] { 0.0, 1.0, 1.0 };
+		gbl.rowWeights = new double[] { 1.0, 1.0, 0.0 };
+		setLayout(gbl);
+
+		this.legends = legends;
+		this.yvals = yVals;
+		this.gofr = gofr;
+
 		XYDataset dataset = createDataset(gofr, legends, yVals);
 		JFreeChart chart = createChart(dataset, title, gofr);
 		chartPanel = new ChartPanel(chart);
@@ -123,13 +127,22 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		GridBagConstraints gbcY1 = new GridBagConstraints();
 		GridBagConstraints gbcY2 = new GridBagConstraints();
 		GridBagConstraints gbcButton = new GridBagConstraints();
+		final NumberAxis domain = (NumberAxis) ((XYPlot) chartPanel
+				.getChart().getPlot()).getDomainAxis();
+		final NumberAxis range = (NumberAxis) ((XYPlot) chartPanel
+				.getChart().getPlot()).getRangeAxis();
 
-		final NumberAxis domain = (NumberAxis) ((XYPlot) chartPanel.getChart()
-				.getPlot()).getDomainAxis();
-		domain.setUpperBound(2.5);
-		final NumberAxis range = (NumberAxis) ((XYPlot) chartPanel.getChart()
-				.getPlot()).getRangeAxis();
-		range.setUpperBound(5);
+		if (gofr) {
+			domain.setLowerBound(over.gr_xMin);
+			domain.setUpperBound(over.gr_xMax);
+			range.setLowerBound(over.gr_yMin);
+			range.setUpperBound(over.gr_yMax);
+		} else {
+			domain.setLowerBound(over.pot_xMin);
+			domain.setUpperBound(over.pot_xMax);
+			range.setLowerBound(over.pot_yMin);
+			range.setUpperBound(over.pot_yMax);
+		}
 
 		gbcX2.gridx = 2;
 		gbcX2.gridy = 2;
@@ -140,13 +153,18 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 		xMax.setText("" + domain.getUpperBound());
 		// gbcX2.fill = GridBagConstraints.VERTICAL;
 		add(xMax, gbcX2);
+		final boolean gr = gofr;
 		xMax.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				domain.setRange(domain.getLowerBound(),
-						Double.parseDouble(xMax.getText()));
-
+				if(gr){
+					over.gr_xMax = Double.parseDouble(xMax.getText());
+					domain.setRange(over.gr_xMin, over.gr_xMax);
+				}else{
+					over.pot_xMax = Double.parseDouble(xMax.getText());
+					domain.setRange(over.pot_xMin, over.pot_xMax);
+				}
 			}
 
 			@Override
@@ -167,9 +185,15 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				domain.setRange(Double.parseDouble(xMin.getText()),
-						domain.getUpperBound());
-
+				x1 = Double.parseDouble(xMin.getText());
+				domain.setRange(x1, x2);
+				if(gr){
+					over.gr_xMin = Double.parseDouble(xMin.getText());
+					domain.setRange(over.gr_xMin, over.gr_xMax);
+				}else{
+					over.pot_xMin = Double.parseDouble(xMin.getText());
+					domain.setRange(over.pot_xMin, over.pot_xMax);
+				}
 			}
 
 			@Override
@@ -190,8 +214,13 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				range.setRange(Double.parseDouble(yMin.getText()),
-						range.getUpperBound());
+				if(gr){
+					over.gr_yMin = Double.parseDouble(yMin.getText());
+					range.setRange(over.gr_yMin, over.gr_yMax);
+				}else{
+					over.pot_yMin = Double.parseDouble(yMin.getText());
+					range.setRange(over.pot_yMin, over.pot_yMax);
+				}
 
 			}
 
@@ -213,9 +242,13 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				range.setRange(range.getLowerBound(),
-						Double.parseDouble(yMax.getText()));
-
+				if(gr){
+					over.gr_yMax = Double.parseDouble(yMax.getText());
+					range.setRange(over.gr_yMin, over.gr_yMax);
+				}else{
+					over.pot_yMax = Double.parseDouble(yMax.getText());
+					range.setRange(over.pot_yMin, over.pot_yMax);
+				}
 			}
 
 			@Override
@@ -241,7 +274,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 				series.add(0, 0);
 				series.add(1, 0);
 			} else {
-				series.add(1, 1000);
+				series.add(1, 10);
 			}
 			double[][] arr = yVals.get(i);
 			int j = 0;
@@ -312,26 +345,26 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 			renderer.setSeriesPaint(i * 6 + 0, new Color(255, 0, 0));
 			renderer.setSeriesPaint(i * 6 + 1, new Color(0, 0, 255));
 			renderer.setSeriesPaint(i * 6 + 2, new Color(0, 139, 0));
-			renderer.setSeriesPaint(i * 6 + 3, new Color(255, 0, 255));
-			renderer.setSeriesPaint(i * 6 + 4, new Color(255, 165, 0));
+			renderer.setSeriesPaint(i * 6 + 3, new Color(255, 165, 0));
+			renderer.setSeriesPaint(i * 6 + 4, new Color(255, 0, 255));
 			renderer.setSeriesPaint(i * 6 + 5, new Color(0, 0, 0));
 
-			renderer.setSeriesStroke(i * 6 + 0, new BasicStroke(2.0f,
+			renderer.setSeriesStroke(i * 6 + 0, new BasicStroke(1.3f,
 					BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
 					new float[] { 10.0f }, 0.0f));
-			renderer.setSeriesStroke(i * 6 + 1, new BasicStroke(2.0f,
+			renderer.setSeriesStroke(i * 6 + 1, new BasicStroke(1.3f,
 					BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
 					new float[] { 50.0f, 2.0f }, 0.0f));
-			renderer.setSeriesStroke(i * 6 + 2, new BasicStroke(2.0f,
+			renderer.setSeriesStroke(i * 6 + 2, new BasicStroke(1.3f,
 					BasicStroke.JOIN_ROUND, BasicStroke.JOIN_MITER, 10.0f,
 					new float[] { 30.0f, 1.0f, 1.0f }, 0.0f));
-			renderer.setSeriesStroke(i * 6 + 3, new BasicStroke(2.0f,
+			renderer.setSeriesStroke(i * 6 + 3, new BasicStroke(1.3f,
 					BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f,
 					new float[] { 1.0f, 3.0f }, 0.0f));
-			renderer.setSeriesStroke(i * 6 + 4, new BasicStroke(2.0f,
+			renderer.setSeriesStroke(i * 6 + 4, new BasicStroke(1.3f,
 					BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
 					new float[] { 1.0f, 2.0f, 3.0f, 4.0f }, 0.0f));
-			renderer.setSeriesStroke(i * 6 + 5, new BasicStroke(2.0f,
+			renderer.setSeriesStroke(i * 6 + 5, new BasicStroke(1.3f,
 					BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
 					new float[] { 5.0f, 1.0f, 20.0f, 1.0f }, 0.0f));
 		}
@@ -343,7 +376,7 @@ public class EmbeddedChart extends JInternalFrame implements Serializable {
 	}
 
 	public EmbeddedChart copy() {
-		return new EmbeddedChart(title, legends, yvals, gofr);
+		return new EmbeddedChart(title, legends, yvals, gofr, over);
 	}
 
 }

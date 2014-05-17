@@ -1,18 +1,18 @@
 /**
- *  This file is part of FluidInfo.
+ *  This file is part of FluidRDFApp.
 
-    FluidInfo is free software: you can redistribute it and/or modify
+    FluidRDFApp is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    FluidInfo is distributed in the hope that it will be useful,
+    FluidRDFApp is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+    along with FluidRDFApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Applet;
 
@@ -128,7 +128,7 @@ public class ComparisonTab extends JPanel implements Serializable {
 
 		String[] names = {};
 		ArrayList<double[][]> RYVals = new ArrayList<>();
-		panel = new EmbeddedChart("Radial distribution function,  g(r)", names, RYVals, true);
+		panel = new EmbeddedChart("Radial distribution function,  g(r)", names, RYVals, true, parent);
 		gbc_panel = new GridBagConstraints();
 		gbc_panel.weighty = 0.75;
 		gbc_panel.gridwidth = 3;
@@ -171,7 +171,7 @@ public class ComparisonTab extends JPanel implements Serializable {
 		}
 		String[] legends = leg.toArray(new String[0]);
 		remove(panel.getContentPane());
-		panel = new EmbeddedChart("Radial distribution function,  g(r)", legends, vals, true);
+		panel = new EmbeddedChart("Radial distribution function,  g(r)", legends, vals, true, parent);
 		add(panel.getContentPane(), gbc_panel);
 		ComparisonTab.this.revalidate();
 		ComparisonTab.this.repaint();

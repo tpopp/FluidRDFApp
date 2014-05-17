@@ -1,18 +1,18 @@
 /**
- *  This file is part of FluidInfo.
+ *  This file is part of FluidRDFApp.
 
-    FluidInfo is free software: you can redistribute it and/or modify
+    FluidRDFApp is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    FluidInfo is distributed in the hope that it will be useful,
+    FluidRDFApp is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with FluidInfo.  If not, see <http://www.gnu.org/licenses/>.
+    along with FluidRDFApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Applet;
 
@@ -70,8 +70,10 @@ public class FluidApp extends JApplet implements Serializable {
 	private JMenuItem loadSys;
 	private JMenuItem storeSys;
 	private ThermodynamicsTab thermo;
-	private float[][] G0 = new float[49][1001];
-	private float[][][] G1 = new float[49][1001][101];
+	private float[][] G0 = new float[65][1001];
+	private float[][][] G1 = new float[65][1001][101];
+	public double gr_xMin = 0, gr_xMax = 2.5, gr_yMin = 0, gr_yMax = 4; 
+	public double pot_xMin = 0, pot_xMax = 2.5, pot_yMin = -1, pot_yMax = 3;
 	
 	
 
@@ -84,7 +86,7 @@ public class FluidApp extends JApplet implements Serializable {
 		BufferedReader br1;
 		String num, line;
 		int j, k;
-		for(int i = 1; i <= 48; i++){
+		for(int i = 1; i <= 64; i++){
 			num = i < 10 ? "0" + i : "" + i;
 			try {
 				br0 = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/tl_g0/tl_g0_phi0."+num+".dat")));
