@@ -29,7 +29,7 @@ import calculations.Data;
 public class DynamicInfo implements Serializable {
 
 	private static final long serialVersionUID = 7791030920524060243L;
-	List<Data> systems = new LinkedList<>();
+	List<Data> systems = new LinkedList<Data>();
 	
 	public DynamicInfo() {
 		

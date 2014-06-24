@@ -34,7 +34,7 @@ public final class SetupInfo  implements Serializable {
 	public List<Parameter> params;
 
 	public SetupInfo() {
-		params = new ArrayList<>();
+		params = new ArrayList<Parameter>();
 		params.add(new Parameter("Packing Fraction", false, "", 0.40));
 		params.add(new Parameter("Number Density", false, "", 0.763944));
 		params.add(new Parameter("Delta eps max", true, "Max potential change",

@@ -82,7 +82,7 @@ public class SystemTab extends JPanel implements Serializable,
 	private double temperature = 1.0;
 	double numberDensity = packingFraction * 6 / Math.PI, epsMax = 0.1,
 			deltaR = 0.001, maxR = 10.0;
-	private int numR = 10_000;
+	private int numR = 10000;
 
 	private SystemTab me;
 	protected FluidApp parent;
@@ -530,7 +530,7 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_lblNewLabel_7.gridy = 10;
 		gbc_lblNewLabel_7.gridwidth = 3;
 		add(chartTitle, gbc_lblNewLabel_7);
-		ArrayList<double[][]> RYVals = new ArrayList<>();
+		ArrayList<double[][]> RYVals = new ArrayList<double[][]>();
 		double[][] disc = { dat.r, dat.disc_v };
 		double[][] cont = { new double[] { 1., 2. }, new double[] { 0., 0. } };
 		RYVals.add(cont);
@@ -555,7 +555,7 @@ public class SystemTab extends JPanel implements Serializable,
 	public void tableUpdate() {
 		try {
 			me.remove(chartFrame.getContentPane());
-			ArrayList<double[][]> RYVals = new ArrayList<>();
+			ArrayList<double[][]> RYVals = new ArrayList<double[][]>();
 			double[] disc_arr = new double[dat.disc_v.length * 2 - 1];
 			double[] disc_r = new double[dat.disc_v.length * 2 - 1];
 			int ii;
@@ -572,7 +572,7 @@ public class SystemTab extends JPanel implements Serializable,
 			me.add(chartFrame.getContentPane(), chartConstraint);
 			parent.somethingChanged();
 		} catch (Exception E) {
-			ArrayList<double[][]> RYVals = new ArrayList<>();
+			ArrayList<double[][]> RYVals = new ArrayList<double[][]>();
 			double[] disc_r = {};
 			double[] disc_arr = {};
 			double[][] disc = { disc_r, disc_arr };
@@ -590,9 +590,9 @@ public class SystemTab extends JPanel implements Serializable,
 
 		@Override
 		protected Void doInBackground() throws Exception {
-			List<Double> radii = new LinkedList<>();
-			List<Double> potentials = new LinkedList<>();
-			PriorityQueue<Pair> pq = new PriorityQueue<>();
+			List<Double> radii = new LinkedList<Double>();
+			List<Double> potentials = new LinkedList<Double>();
+			PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
 			for (int i = 0; i < listr.size(); i++) {
 				pq.add(new Pair(listr.get(i), listv.get(i)));
 			}
@@ -955,9 +955,9 @@ public class SystemTab extends JPanel implements Serializable,
 
 					@Override
 					protected Void doInBackground() throws Exception {
-						List<Double> radii = new LinkedList<>();
-						List<Double> potentials = new LinkedList<>();
-						PriorityQueue<Pair> pq = new PriorityQueue<>();
+						List<Double> radii = new LinkedList<Double>();
+						List<Double> potentials = new LinkedList<Double>();
+						PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
 						for (int i = 0; i < listr.size(); i++) {
 							pq.add(new Pair(listr.get(i), listv.get(i)));
 						}
@@ -1076,8 +1076,9 @@ public class SystemTab extends JPanel implements Serializable,
 				int option = jf.showOpenDialog(SystemTab.this);
 				if (option == JFileChooser.APPROVE_OPTION) {
 					tableModel.setRowCount(0);
-					try (Scanner sc = new Scanner(jf.getSelectedFile())
-							.useDelimiter("[\\s,]+")) {
+					try {
+						Scanner sc = new Scanner(jf.getSelectedFile())
+								.useDelimiter("[\\s,]+");
 						listv.clear();
 						listr.clear();
 						Double[] temp = new Double[2];
@@ -1205,7 +1206,7 @@ public class SystemTab extends JPanel implements Serializable,
 						dat.given_r[i] = listr.get(i);
 						dat.given_v[i] = listv.get(i);
 					}
-					ArrayList<double[][]> RYVals = new ArrayList<>();
+					ArrayList<double[][]> RYVals = new ArrayList<double[][]>();
 					double[][] cont = { dat.given_r, dat.given_v };
 					String[] name = { "Smooth" };
 					RYVals.add(cont);

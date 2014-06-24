@@ -55,7 +55,7 @@ public class ExportTable extends JPanel implements Serializable {
 	private JComboBox<String> comboBox;
 	private JButton btnExport;
 	private DynamicInfo dats;
-	private HashMap<String, JTable> tables = new HashMap<>();
+	private HashMap<String, JTable> tables = new HashMap<String, JTable>();
 	private JScrollPane scrollPane;
 	private GridBagConstraints gbc_scrollPane;
 	FluidApp parent;
@@ -125,8 +125,8 @@ public class ExportTable extends JPanel implements Serializable {
 		for (ItemListener a : comboBox.getItemListeners())
 			comboBox.removeItemListener(a);
 		comboBox.removeAllItems();
-		List<Double[]> arr = new LinkedList<>();
-		List<String> compareNames = new LinkedList<>();
+		List<Double[]> arr = new LinkedList<Double[]>();
+		List<String> compareNames = new LinkedList<String>();
 		boolean first = true;
 		for (Data d : dats.systems) {
 			String[] headers = { "r", "continuous potential",
@@ -288,8 +288,9 @@ public class ExportTable extends JPanel implements Serializable {
 				JFileChooser jf = new JFileChooser();
 				int n = jf.showSaveDialog(getRootPane());
 				if (n == JFileChooser.APPROVE_OPTION) {
-					try (BufferedWriter bw = new BufferedWriter(new FileWriter(
-							jf.getSelectedFile()))) {
+					try {
+						BufferedWriter bw = new BufferedWriter(new FileWriter(
+								jf.getSelectedFile()));
 						StringBuilder sb = new StringBuilder("#");
 						int i = table.getColumnCount();
 						int j = table.getRowCount();

@@ -72,10 +72,8 @@ public class FluidApp extends JApplet implements Serializable {
 	private ThermodynamicsTab thermo;
 	private float[][] G0 = new float[65][1001];
 	private float[][][] G1 = new float[65][1001][101];
-	public double gr_xMin = 0, gr_xMax = 2.5, gr_yMin = 0, gr_yMax = 4; 
+	public double gr_xMin = 0, gr_xMax = 2.5, gr_yMin = 0, gr_yMax = 4;
 	public double pot_xMin = 0, pot_xMax = 2.5, pot_yMin = -1, pot_yMax = 3;
-	
-	
 
 	/** 
 	 * 
@@ -86,23 +84,27 @@ public class FluidApp extends JApplet implements Serializable {
 		BufferedReader br1;
 		String num, line;
 		int j, k;
-		for(int i = 1; i <= 64; i++){
+		for (int i = 1; i <= 64; i++) {
 			num = i < 10 ? "0" + i : "" + i;
 			try {
-				br0 = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/tl_g0/tl_g0_phi0."+num+".dat")));
-				br1 = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/tl_g1_lowres/tl_g1_phi0."+num+".dat")));
+				br0 = new BufferedReader(new InputStreamReader(this.getClass()
+						.getResourceAsStream(
+								"/tl_g0/tl_g0_phi0." + num + ".dat")));
+				br1 = new BufferedReader(new InputStreamReader(this.getClass()
+						.getResourceAsStream(
+								"/tl_g1_lowres/tl_g1_phi0." + num + ".dat")));
 				br0.readLine();
 				br1.readLine();
 				br1.readLine();
 				j = 0;
-				while((line = br0.readLine()) != null){
+				while ((line = br0.readLine()) != null) {
 					G0[i][++j] = Float.parseFloat(line.trim().split("\\s+")[2]);
 				}
 				j = 0;
-				while((line = br1.readLine()) != null){
+				while ((line = br1.readLine()) != null) {
 					++j;
 					String[] arr = line.trim().split("\\s+");
-					for(k = 1; k <= 100; k++)
+					for (k = 1; k <= 100; k++)
 						G1[i][j][k] = Float.parseFloat(arr[k]);
 				}
 			} catch (IOException e) {
@@ -148,7 +150,7 @@ public class FluidApp extends JApplet implements Serializable {
 		dats.systems.add(new Data());
 		dats.systems.get(0).g0 = G0;
 		dats.systems.get(0).g1 = G1;
-		
+
 		// Add initial windows
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
@@ -271,8 +273,9 @@ public class FluidApp extends JApplet implements Serializable {
 			public void actionPerformed(ActionEvent arg0) {
 				int choice = jf.showSaveDialog(FluidApp.this);
 				if (choice == JFileChooser.APPROVE_OPTION) {
-					try (ObjectOutputStream os = new ObjectOutputStream(
-							new FileOutputStream(jf.getSelectedFile()));) {
+					try {
+						ObjectOutputStream os = new ObjectOutputStream(
+								new FileOutputStream(jf.getSelectedFile()));
 						FluidApp.this.stop();
 						os.writeObject(FluidApp.this);
 						FluidApp.this.start();
@@ -291,8 +294,9 @@ public class FluidApp extends JApplet implements Serializable {
 			public void actionPerformed(ActionEvent arg0) {
 				int choice = jf.showOpenDialog(FluidApp.this);
 				if (choice == JFileChooser.APPROVE_OPTION) {
-					try (ObjectInputStream is = new ObjectInputStream(
-							new FileInputStream(jf.getSelectedFile()));) {
+					try {
+						ObjectInputStream is = new ObjectInputStream(
+								new FileInputStream(jf.getSelectedFile()));
 						FluidApp app = (FluidApp) is.readObject();
 						app.start();
 						javax.swing.JFrame window = new javax.swing.JFrame(
@@ -302,7 +306,7 @@ public class FluidApp extends JApplet implements Serializable {
 						window.pack(); // Arrange the components.
 						window.setVisible(true); // Make the window visible.
 						window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-					} catch (IOException | ClassNotFoundException e1) {
+					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(getRootPane(),
 								"Error: \n\n" + e1);
 					}
@@ -317,8 +321,9 @@ public class FluidApp extends JApplet implements Serializable {
 
 				int choice = jf.showSaveDialog(FluidApp.this);
 				if (choice == JFileChooser.APPROVE_OPTION) {
-					try (ObjectOutputStream os = new ObjectOutputStream(
-							new FileOutputStream(jf.getSelectedFile()));) {
+					try {
+						ObjectOutputStream os = new ObjectOutputStream(
+								new FileOutputStream(jf.getSelectedFile()));
 						FluidApp.this.stop();
 						os.writeObject(systems.getSelectedComponent());
 						FluidApp.this.start();
@@ -337,8 +342,9 @@ public class FluidApp extends JApplet implements Serializable {
 			public void actionPerformed(ActionEvent e) {
 				int choice = jf.showOpenDialog(FluidApp.this);
 				if (choice == JFileChooser.APPROVE_OPTION) {
-					try (ObjectInputStream is = new ObjectInputStream(
-							new FileInputStream(jf.getSelectedFile()));) {
+					try {
+						ObjectInputStream is = new ObjectInputStream(
+								new FileInputStream(jf.getSelectedFile()));
 						SystemTab tab = (SystemTab) is.readObject();
 						tab.parent = FluidApp.this;
 						if (tab.getName().matches("System \\d+")) {
@@ -349,7 +355,7 @@ public class FluidApp extends JApplet implements Serializable {
 						systems.add(tab);
 						compare.systemUpdate();
 						somethingChanged();
-					} catch (IOException | ClassNotFoundException e1) {
+					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(getRootPane(),
 								"Error: \n\n" + e1);
 					}

@@ -54,7 +54,7 @@ public class SmoothGofr {
 		// G_AVG:
 		for (i = 0; i < lambda.length; i++) {
 			j = 0;
-			while (r[j]-0.00001 < lambda[i]) // Skip until r > current lambda
+			while (r[j] < lambda[i]) // Skip until r > current lambda
 			{
 				j++;
 				continue;

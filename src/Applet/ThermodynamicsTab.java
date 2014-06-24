@@ -224,8 +224,10 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 				JFileChooser jf = new JFileChooser();
 				int n = jf.showSaveDialog(getRootPane());
 				if (n == JFileChooser.APPROVE_OPTION) {
-					try (BufferedWriter bw = new BufferedWriter(new FileWriter(
-							jf.getSelectedFile()))) {
+					BufferedWriter bw;
+					try {
+						bw = new BufferedWriter(new FileWriter(
+								jf.getSelectedFile()));
 						StringBuilder sb = new StringBuilder();
 						int i = information.getColumnCount();
 						int j = information.getRowCount();
@@ -241,6 +243,7 @@ public class ThermodynamicsTab extends JPanel implements Serializable {
 							sb.append('\n');
 						}
 						bw.write(sb.toString());
+						bw.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

@@ -30,7 +30,7 @@ public class Data implements Serializable  {
 	public double[] epsilon = {};
 	public double[] lambda = {};
 	public double[] r = {};
-	public HashMap<String, String> printed = new HashMap<>();
+	public HashMap<String, String> printed = new HashMap<String, String>();
 	public double[] gofr = {};
 	public double[] rough_gofr = {};
 	public double[] disc_v = {};

@@ -127,7 +127,7 @@ public class ComparisonTab extends JPanel implements Serializable {
 		add(newWindowButton, gbc_btnNWButton);
 
 		String[] names = {};
-		ArrayList<double[][]> RYVals = new ArrayList<>();
+		ArrayList<double[][]> RYVals = new ArrayList<double[][]>();
 		panel = new EmbeddedChart("Radial distribution function,  g(r)", names, RYVals, true, parent);
 		gbc_panel = new GridBagConstraints();
 		gbc_panel.weighty = 0.75;
@@ -151,8 +151,8 @@ public class ComparisonTab extends JPanel implements Serializable {
 	}
 
 	public void refreshChart() {
-		List<String> leg = new LinkedList<>();
-		List<double[][]> vals = new LinkedList<>();
+		List<String> leg = new LinkedList<String>();
+		List<double[][]> vals = new LinkedList<double[][]>();
 		for (Data d : systems.systems) {
 			if (d.show[0]) {
 				leg.add(d.name + " sawtoothed");
