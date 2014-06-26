@@ -4,4 +4,4 @@ Main-Class: Applet.FluidApp
 Permissions: all-permissions
 Application-Name: Fluid Applet
 Codebase: http://www.truskettgroup.com/fluidapp/
-Class-Path: ..
+Class-Path: .
