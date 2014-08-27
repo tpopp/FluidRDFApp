@@ -52,7 +52,7 @@ public class ExportTable extends JPanel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 873100138278353002L;
-	private JComboBox<String> comboBox;
+	private JComboBox comboBox;
 	private JButton btnExport;
 	private DynamicInfo dats;
 	private HashMap<String, JTable> tables = new HashMap<String, JTable>();
@@ -82,7 +82,7 @@ public class ExportTable extends JPanel implements Serializable {
 		gbc_lblDataLabels.gridy = 0;
 		add(lblDataLabels, gbc_lblDataLabels);
 
-		comboBox = new JComboBox<String>();
+		comboBox = new JComboBox();
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;

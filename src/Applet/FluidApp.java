@@ -205,13 +205,15 @@ public class FluidApp extends JApplet implements Serializable {
 
 	public void newStuff() {
 		thermo.updateInfo();
+		compare.invalidate();
 		compare.revalidate();
-		compare.repaint();
-		systems.getSelectedComponent().revalidate();
+		systems.getSelectedComponent().invalidate();
+		systems.getSelectedComponent().validate();
 		systems.getSelectedComponent().repaint();
 		table.revalidate();
 		table.repaint();
-		revalidate();
+		invalidate();
+		validate();
 		repaint();
 	}
 

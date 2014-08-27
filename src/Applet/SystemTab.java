@@ -1228,7 +1228,8 @@ public class SystemTab extends JPanel implements Serializable,
 					me.add(chartFrame.getContentPane(), chartConstraint);
 					me.revalidate();
 					me.repaint();
-					parent.revalidate();
+					parent.invalidate();
+					parent.validate();
 					parent.repaint();
 				}
 			};

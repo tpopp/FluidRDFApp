@@ -175,7 +175,8 @@ public class ComparisonTab extends JPanel implements Serializable {
 		add(panel.getContentPane(), gbc_panel);
 		ComparisonTab.this.revalidate();
 		ComparisonTab.this.repaint();
-		parent.revalidate();
+		parent.invalidate();
+		parent.validate();
 		parent.repaint();
 	}
 
