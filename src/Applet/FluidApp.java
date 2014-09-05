@@ -21,7 +21,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -49,12 +51,12 @@ import calculations.Data;
  */
 /**
  * @author Tres
- * 
+ *
  */
 public class FluidApp extends JApplet implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6574435618466046038L;
 	private JTabbedPane calculations;
@@ -75,8 +77,8 @@ public class FluidApp extends JApplet implements Serializable {
 	public double gr_xMin = 0, gr_xMax = 2.5, gr_yMin = 0, gr_yMax = 4;
 	public double pot_xMin = 0, pot_xMax = 2.5, pot_yMin = -1, pot_yMax = 3;
 
-	/** 
-	 * 
+	/**
+	 *
 	 */
 	public void init() {
 
@@ -84,37 +86,33 @@ public class FluidApp extends JApplet implements Serializable {
 		BufferedReader br1;
 		String num, line;
 		int j, k;
-		for (int i = 1; i <= 64; i++) {
-			num = i < 10 ? "0" + i : "" + i;
-			try {
-				br0 = new BufferedReader(new InputStreamReader(this.getClass()
-						.getResourceAsStream(
-								"/tl_g0/tl_g0_phi0." + num + ".dat")));
-				br1 = new BufferedReader(new InputStreamReader(this.getClass()
-						.getResourceAsStream(
-								"/tl_g1_lowres/tl_g1_phi0." + num + ".dat")));
-				br0.readLine();
-				br1.readLine();
-				br1.readLine();
-				j = 0;
-				while ((line = br0.readLine()) != null) {
-					G0[i][++j] = Float.parseFloat(line.trim().split("\\s+")[2]);
+		try {
+			DataInputStream di0 = new DataInputStream(
+					new BufferedInputStream(this.getClass()
+							.getResourceAsStream("/tl_g0_all.dat")));
+			DataInputStream di1 = new DataInputStream(
+					new BufferedInputStream(this.getClass()
+							.getResourceAsStream("/tl_g1_lowres_all.dat")));
+			for (int ii = 1; ii < 65; ii++) {
+				for (int jj = 1; jj < 1001; jj++) {
+					G0[ii][jj] = di0.readFloat();
 				}
-				j = 0;
-				while ((line = br1.readLine()) != null) {
-					++j;
-					String[] arr = line.trim().split("\\s+");
-					for (k = 1; k <= 100; k++)
-						G1[i][j][k] = Float.parseFloat(arr[k]);
-				}
-			} catch (IOException e) {
-				G0 = null;
-				G1 = null;
-				System.out.println("fail");
-				break;
 			}
+			for (int ii = 1; ii < 65; ii++) {
+				for (int jj = 1; jj < 1001; jj++) {
+					for (int kk = 1; kk < 101; kk++) {
+						G1[ii][jj][kk] = di1.readFloat();
+					}
+				}
+			}
+		} catch (IOException e) {
+			G0 = null;
+			G1 = null;
+			e.printStackTrace();
+			System.out.println("fail");
 		}
 		final JFileChooser jf = new JFileChooser();
+
 		// menubar
 		JMenuBar menu = new JMenuBar();
 		JMenu options = new JMenu("Systems");
