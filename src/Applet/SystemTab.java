@@ -129,7 +129,7 @@ public class SystemTab extends JPanel implements Serializable,
 		setName("System " + (i + 1));
 
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 109, 28, 0, 31, 0, 0, 0 };
+		gbl_panel.columnWidths = new int[] { 109, 10, 0, 31, 0, 0, 0 };
 		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
 		gbl_panel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
 				Double.MIN_VALUE };
@@ -254,7 +254,8 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_temp.gridy = 2;
 		add(lbl_temp, gbc_temp);
 
-		tempHint = new JButton("?"); //$NON-NLS-1$
+		tempHint = new JButton(" ? "); //$NON-NLS-1$
+		tempHint.setBorder(null);
 		GridBagConstraints gbcTemp_button = new GridBagConstraints();
 		gbcTemp_button.insets = new Insets(0, 0, 5, 5);
 		gbcTemp_button.gridx = 1;
@@ -287,7 +288,8 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_lblNewLabel_3.gridy = 3;
 		add(lblNewLabel_3, gbc_lblNewLabel_3);
 
-		packingHint = new JButton("?"); //$NON-NLS-1$
+		packingHint = new JButton(" ? "); //$NON-NLS-1$
+		packingHint.setBorder(null);
 		GridBagConstraints gbcPacking_button = new GridBagConstraints();
 		gbcPacking_button.insets = new Insets(0, 0, 5, 5);
 		gbcPacking_button.gridx = 1;
@@ -319,7 +321,8 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_lblNumberDensity.gridy = 4;
 		add(lblNumberDensity, gbc_lblNumberDensity);
 
-		densityHint = new JButton("?"); //$NON-NLS-1$
+		densityHint = new JButton(" ? "); //$NON-NLS-1$
+		densityHint.setBorder(null);
 		GridBagConstraints gbcDensity_button = new GridBagConstraints();
 		gbcDensity_button.insets = new Insets(0, 0, 5, 5);
 		gbcDensity_button.gridx = 1;
@@ -351,7 +354,7 @@ public class SystemTab extends JPanel implements Serializable,
 		// gbc_lblDeltaEpsMax.gridy = 5;
 		// add(lblDeltaEpsMax, gbc_lblDeltaEpsMax);
 		//
-		//		deltaEpsHint = new JButton("?"); //$NON-NLS-1$
+		//		deltaEpsHint = new JButton(" ? "); //$NON-NLS-1$
 		// GridBagConstraints gbc_button = new GridBagConstraints();
 		// gbc_button.insets = new Insets(0, 0, 5, 5);
 		// gbc_button.gridx = 1;
@@ -382,7 +385,7 @@ public class SystemTab extends JPanel implements Serializable,
 		// gbc_lblNewLabel_5.gridy = 7;
 		// add(lblNewLabel_5, gbc_lblNewLabel_5);
 		//
-		//		numRHint = new JButton("?"); //$NON-NLS-1$
+		//		numRHint = new JButton(" ? "); //$NON-NLS-1$
 		// GridBagConstraints gbc_button_2 = new GridBagConstraints();
 		// gbc_button_2.insets = new Insets(0, 0, 5, 5);
 		// gbc_button_2.gridx = 1;
@@ -413,7 +416,7 @@ public class SystemTab extends JPanel implements Serializable,
 		// gbc_lblDeltaR.gridy = 8;
 		// add(lblDeltaR, gbc_lblDeltaR);
 		//
-		//		deltaRHint = new JButton("?"); //$NON-NLS-1$
+		//		deltaRHint = new JButton(" ? "); //$NON-NLS-1$
 		// GridBagConstraints gbc_button_3 = new GridBagConstraints();
 		// gbc_button_3.insets = new Insets(0, 0, 5, 5);
 		// gbc_button_3.gridx = 1;
@@ -445,7 +448,8 @@ public class SystemTab extends JPanel implements Serializable,
 		gbc_lblNewLabel_6.gridy = 6;
 		add(lblNewLabel_6, gbc_lblNewLabel_6);
 
-		rMaxHint = new JButton("?"); //$NON-NLS-1$
+		rMaxHint = new JButton(" ? "); //$NON-NLS-1$
+		rMaxHint.setBorder(null);
 		GridBagConstraints gbc_button_4 = new GridBagConstraints();
 		gbc_button_4.insets = new Insets(0, 0, 5, 5);
 		gbc_button_4.gridx = 1;
@@ -1260,6 +1264,6 @@ class Pair implements Comparable<Pair> {
 	@Override
 	public int compareTo(Pair arg0) {
 		Pair comp = arg0;
-		return radius - comp.radius > 0 ? 1 : -1;
+		return radius - comp.radius > 0  ?  1 : -1;
 	}
 }
